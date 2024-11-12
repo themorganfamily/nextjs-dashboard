@@ -32,7 +32,7 @@ export default function Page() {
             <strong>Welcome to your boilerplate.</strong> This {' '}
             <a href="https://nextjs.org/learn/" className="text-blue-500">
             NEXT.js   </a>
-               solution will help guide you in building apps for this platform.
+               solution will help guide you in building apps for this platform ay.
           </p>
           <Link
             href="/login"
