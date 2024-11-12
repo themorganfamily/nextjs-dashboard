@@ -6,6 +6,11 @@ import { fetchLatestInvoices } from '@/app/lib/data'; // remove fetchRevenue - f
 import { Suspense } from 'react';
 import CardWrapper from '@/app/ui/dashboard/cards';
 import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardsSkeleton } from '@/app/ui/skeletons';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Home',
+};
 
 export default async function Page() {
   // const revenue = await fetchRevenue();
