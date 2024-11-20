@@ -146,7 +146,8 @@ let config = {
     'Zip-Version': '2017-03-01', 
     'Cookie': '__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA'
   },
-  data : data
+  data : data,
+  withCredentials: false,
 };
 
 return axios.request(config)
