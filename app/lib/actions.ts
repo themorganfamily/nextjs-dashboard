@@ -163,7 +163,7 @@ export async function createCheckout(prevState: State, formData: FormData) {
         body: raw
     };
 
-    return fetch("https://192.168.0.103:3001/checkouts", requestOptions)
+    return fetch("https://api.sandbox.zip.co/merchant/checkouts", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
@@ -196,7 +196,7 @@ export async function getCheckout(id: string) {
         headers: myHeaders
     };
 
-    return fetch("https://192.168.0.103:3001/checkouts/" + id, requestOptions)
+    return fetch("https://api.sandbox.zip.co/merchant/checkouts/" + id, requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
@@ -408,7 +408,7 @@ export async function createCharge(checkoutId: string, amount: number, capture: 
         body: raw
     };
 
-    return fetch("https://192.168.0.103:3001/charges", requestOptions)
+    return fetch("https://api.sandbox.zip.co/merchant/charges", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
