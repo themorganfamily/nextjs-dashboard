@@ -9,6 +9,7 @@ import { AuthError } from 'next-auth';
 import type { User } from '@/app/lib/definitions';
 import axios from 'axios';
 import { cookies } from "next/headers";
+// import { NextRequest, NextResponse } from 'next/server';
 
 export async function authenticate(
     prevState: string | undefined,

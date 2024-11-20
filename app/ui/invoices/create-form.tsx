@@ -50,7 +50,7 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
 
   }
 
-  const [state, formAction] = useActionState(serverSubmit, initialState);
+  const [state, formAction] = useActionState(redirectToZip, initialState);
 
   if (state.message !== null) {
     amount = undefined;
