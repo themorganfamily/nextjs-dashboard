@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import type { User } from '@/app/lib/definitions';
-import { CreateCustomer } from '../ui/invoices/buttons';
+import axios from 'axios';
 
 export async function authenticate(
     prevState: string | undefined,
@@ -96,7 +96,7 @@ export async function createCheckout(prevState: State, formData: FormData) {
     console.log("inside createCheckout");
     const user = await getUser("user@nextmail.com");
 
-    const axios = require('axios');
+    // const axios = require('axios');
     console.log("past require Axios");
 let data = JSON.stringify({
   "shopper": {
