@@ -8,6 +8,7 @@ import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import type { User } from '@/app/lib/definitions';
 import axios from 'axios';
+import { cookies } from "next/headers";
 
 export async function authenticate(
     prevState: string | undefined,
@@ -496,10 +497,10 @@ export async function redirectToZip(prevState: State, formData: FormData) {
         'Content-Type': 'application/json', 
         'Authorization': 'Bearer IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=', 
         'Zip-Version': '2017-03-01', 
-        'Cookie': '__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA'
+        'Cookie': cookies().toString()
       },
       data : data,
-      withCredentials: true,
+      credentials: 'include'
     };
     
     console.log("Request prepared");
