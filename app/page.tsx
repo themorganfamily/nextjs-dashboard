@@ -1,4 +1,4 @@
-import AcmeLogo from '@/app/ui/acme-logo';
+import ZipLogo from '@/app/ui/zip-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 //import styles from '@/app/ui/home.module.css';
@@ -9,10 +9,10 @@ import { Metadata } from 'next';
  
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard',
+    template: '%s | Integration Tools',
+    default: 'Integration Tools',
   },
-  description: 'The official Next.js Learn Dashboard built with App Router.',
+  description: 'The official Zip Integration Tools.',
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
 };
 
@@ -20,7 +20,7 @@ export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
-        <AcmeLogo />
+        <ZipLogo />
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">

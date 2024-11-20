@@ -5,6 +5,16 @@ const nextConfig: NextConfig = {
   experimental: {
     ppr: 'incremental',
   },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: 'https://stackoverflow.com/posts/66662033',
+  //       permanent: false,
+  //       basePath: false
+  //     },
+  //   ]
+  // },
 };
 
 export default nextConfig;

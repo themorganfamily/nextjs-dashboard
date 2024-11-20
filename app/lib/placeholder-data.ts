@@ -6,6 +6,8 @@ const users = [
     name: 'User',
     email: 'user@nextmail.com',
     password: '123456',
+    key: 'IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=',
+    customerid: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
   },
 ];
 
@@ -53,79 +55,19 @@ const invoices = [
     customer_id: customers[0].id,
     amount: 15795,
     status: 'pending',
-    date: '2022-12-06',
+    date: '2022-12-06 13:59:59',
   },
   {
     customer_id: customers[1].id,
     amount: 20348,
     status: 'pending',
-    date: '2022-11-14',
+    date: '2022-12-06 23:50:59',
   },
   {
     customer_id: customers[4].id,
     amount: 3040,
     status: 'paid',
-    date: '2022-10-29',
-  },
-  {
-    customer_id: customers[3].id,
-    amount: 44800,
-    status: 'paid',
-    date: '2023-09-10',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 34577,
-    status: 'pending',
-    date: '2023-08-05',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 54246,
-    status: 'pending',
-    date: '2023-07-16',
-  },
-  {
-    customer_id: customers[0].id,
-    amount: 666,
-    status: 'pending',
-    date: '2023-06-27',
-  },
-  {
-    customer_id: customers[3].id,
-    amount: 32545,
-    status: 'paid',
-    date: '2023-06-09',
-  },
-  {
-    customer_id: customers[4].id,
-    amount: 1250,
-    status: 'paid',
-    date: '2023-06-17',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8546,
-    status: 'paid',
-    date: '2023-06-07',
-  },
-  {
-    customer_id: customers[1].id,
-    amount: 500,
-    status: 'paid',
-    date: '2023-08-19',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-06-03',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 1000,
-    status: 'paid',
-    date: '2022-06-05',
+    date: '2022-12-06 23:59:59',
   },
 ];
 

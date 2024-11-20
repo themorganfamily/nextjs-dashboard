@@ -7,6 +7,8 @@ export type User = {
   name: string;
   email: string;
   password: string;
+  key: string;
+  customerid: string;
 };
 
 export type Customer = {
@@ -70,9 +72,6 @@ export type FormattedCustomersTable = {
   name: string;
   email: string;
   image_url: string;
-  total_invoices: number;
-  total_pending: string;
-  total_paid: string;
 };
 
 export type CustomerField = {

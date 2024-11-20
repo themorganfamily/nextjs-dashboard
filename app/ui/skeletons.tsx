@@ -1,6 +1,32 @@
+'use client'
+import React, { useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
 // Loading animation
 const shimmer =
   'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';
+
+  export function loadingSkelelton() {
+    const [checked, setChecked] = React.useState(false)
+
+    const handleChange = () => {
+        setChecked(!checked)
+    }
+    return (
+        <div>
+            <label>
+                <input type='checkbox' checked={checked} onChange={handleChange} />
+                Loading
+            </label>
+            <div>
+                {checked ? (
+                    <Skeleton />
+                ) : (
+                    <p>NextJs Skeleton Loading - GeeksforGeeks</p>
+                )}
+            </div>
+        </div>
+    )
+}
 
 export function CardSkeleton() {
   return (

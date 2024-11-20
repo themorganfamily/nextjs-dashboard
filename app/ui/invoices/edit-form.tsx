@@ -27,7 +27,7 @@ export default function EditInvoiceForm({
     <form action={formAction} aria-describedby="form-error">
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
-        <div className="mb-4">
+        <div className="mb-4" hidden>
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
             Choose customer
           </label>
@@ -67,13 +67,13 @@ export default function EditInvoiceForm({
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
-              <input
+              <input disabled
                 id="amount"
                 name="amount"
                 type="number"
                 step="0.01"
                 defaultValue={invoice.amount}
-                placeholder="Enter USD amount"
+                placeholder="Enter AUD amount"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="amount-error"
               />
@@ -111,7 +111,7 @@ export default function EditInvoiceForm({
                   htmlFor="pending"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Pending <ClockIcon className="h-4 w-4" />
+                  Authorise only <ClockIcon className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -127,7 +127,7 @@ export default function EditInvoiceForm({
                   htmlFor="paid"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Paid <CheckIcon className="h-4 w-4" />
+                  Capture <CheckIcon className="h-4 w-4" />
                 </label>
               </div>
             </div>
