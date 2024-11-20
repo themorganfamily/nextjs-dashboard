@@ -272,7 +272,9 @@ export async function getCheckout(id: string) {
         headers: myHeaders
     };
 
-    return fetch("https://api.sandbox.zip.co/merchant/checkouts/" + id, requestOptions)
+    // return fetch("https://api.sandbox.zip.co/merchant/checkouts/" + id, requestOptions)
+    return fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts/" + id, requestOptions)
+
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
@@ -520,7 +522,7 @@ export async function redirectToZip(prevState: State, formData: FormData) {
         cors: true
     };
 
-    const checkoutResponse = await fetch("https://api.sandbox.zip.co/merchant/checkouts", requestOptions)
+    const checkoutResponse = await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
@@ -657,7 +659,7 @@ export async function createCharge(checkoutId: string, amount: number, capture: 
         cors: true
     };
 
-    return fetch("https://api.sandbox.zip.co/merchant/charges", requestOptions)
+    return fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/charges", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
