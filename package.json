@@ -3,7 +3,7 @@
   "scripts": {
     "build": "next build",
     "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbo",
-    "start": "next start"
+    "start": "NODE_TLS_REJECT_UNAUTHORIZED=0 next start"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
