@@ -92,79 +92,79 @@ export async function createZipUser(prevState: State, formData: FormData) {
 
 }
 
-export async function createCheckout(prevState: State, formData: FormData) {
-    console.log("inside createCheckout");
-    const user = await getUser("user@nextmail.com");
+// export async function createCheckout(prevState: State, formData: FormData) {
+//     console.log("inside createCheckout");
+//     const user = await getUser("user@nextmail.com");
 
-    // const axios = require('axios');
-    console.log("past require Axios");
-let data = JSON.stringify({
-  "shopper": {
-    "first_name": "Test",
-    "last_name": "Testing",
-    "phone": "555",
-    "email": "testemail@tester.com",
-    "billing_address": {
-      "line1": "20 Test Ave",
-      "city": "TESTTOWN",
-      "state": "NSW",
-      "postal_code": "2517",
-      "country": "AU"
-    }
-  },
-  "order": {
-    "reference": "ref_2",
-    "amount": formData.get("amount"),
-    "currency": "AUD",
-    "shipping": {
-      "pickup": false,
-      "address": {
-        "line1": "20 Test Ave",
-        "city": "TESTTOWN",
-        "state": "NSW",
-        "postal_code": "2517",
-        "country": "AU"
-      }
-    }
-  },
-  "features": {
-    "tokenisation": {
-      "required": true
-    }
-  },
-  "config": {
-    "redirect_uri": "http://localhost:3000/dashboard/invoices/create"
-  }
-});
+//     // const axios = require('axios');
+//     console.log("past require Axios");
+// let data = JSON.stringify({
+//   "shopper": {
+//     "first_name": "Test",
+//     "last_name": "Testing",
+//     "phone": "555",
+//     "email": "testemail@tester.com",
+//     "billing_address": {
+//       "line1": "20 Test Ave",
+//       "city": "TESTTOWN",
+//       "state": "NSW",
+//       "postal_code": "2517",
+//       "country": "AU"
+//     }
+//   },
+//   "order": {
+//     "reference": "ref_2",
+//     "amount": formData.get("amount"),
+//     "currency": "AUD",
+//     "shipping": {
+//       "pickup": false,
+//       "address": {
+//         "line1": "20 Test Ave",
+//         "city": "TESTTOWN",
+//         "state": "NSW",
+//         "postal_code": "2517",
+//         "country": "AU"
+//       }
+//     }
+//   },
+//   "features": {
+//     "tokenisation": {
+//       "required": true
+//     }
+//   },
+//   "config": {
+//     "redirect_uri": "http://localhost:3000/dashboard/invoices/create"
+//   }
+// });
 
-let config = {
-  method: 'post',
-  maxBodyLength: Infinity,
-  url: 'https://api.sandbox.zip.co/merchant/checkouts',
-  headers: { 
-    'Content-Type': 'application/json', 
-    'Authorization': 'Bearer IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=', 
-    'Zip-Version': '2017-03-01', 
-    'Cookie': '__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA'
-  },
-  data : data,
-  withCredentials: true,
-};
+// let config = {
+//   method: 'post',
+//   maxBodyLength: Infinity,
+//   url: 'https://api.sandbox.zip.co/merchant/checkouts',
+//   headers: { 
+//     'Content-Type': 'application/json', 
+//     'Authorization': 'Bearer IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=', 
+//     'Zip-Version': '2017-03-01', 
+//     'Cookie': '__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA'
+//   },
+//   data : data,
+//   withCredentials: true,
+// };
 
-console.log("Request prepared");
-console.log(config);
+// console.log("Request prepared");
+// console.log(config);
 
-return axios.request(config)
-.then((response:any) => {
-  console.log(JSON.stringify(response.data));
-  console.log(response.error?.data);
-  return response.data;
-})
-.catch((error:any) => {
-  console.log(error);
-  console.log(error.data);
-  return error.data;
-});
+// return axios.request(config)
+// .then((response:any) => {
+//   console.log(JSON.stringify(response.data));
+//   console.log(response.error?.data);
+//   return response.data;
+// })
+// .catch((error:any) => {
+//   console.log(error);
+//   console.log(error.data);
+//   return error.data;
+// });
 
 
     // const myHeaders = new Headers();
@@ -250,7 +250,7 @@ return axios.request(config)
     // // revalidatePath('/dashboard/invoices');
     // //redirect('/dashboard/invoices');
     // console.log('hmm')
-}
+//}
 
 export async function getCheckout(id: string) {
 
@@ -443,7 +443,82 @@ export async function redirectToZip(prevState: State, formData: FormData) {
     }
     else {
         console.log("Valid (redirectToZip)");
-        const checkoutResponse = await createCheckout(prevState, formData)
+
+        console.log("inside createCheckout");
+        const user = await getUser("user@nextmail.com");
+    
+        // const axios = require('axios');
+        console.log("past require Axios");
+    let data = JSON.stringify({
+      "shopper": {
+        "first_name": "Test",
+        "last_name": "Testing",
+        "phone": "555",
+        "email": "testemail@tester.com",
+        "billing_address": {
+          "line1": "20 Test Ave",
+          "city": "TESTTOWN",
+          "state": "NSW",
+          "postal_code": "2517",
+          "country": "AU"
+        }
+      },
+      "order": {
+        "reference": "ref_2",
+        "amount": formData.get("amount"),
+        "currency": "AUD",
+        "shipping": {
+          "pickup": false,
+          "address": {
+            "line1": "20 Test Ave",
+            "city": "TESTTOWN",
+            "state": "NSW",
+            "postal_code": "2517",
+            "country": "AU"
+          }
+        }
+      },
+      "features": {
+        "tokenisation": {
+          "required": true
+        }
+      },
+      "config": {
+        "redirect_uri": "http://localhost:3000/dashboard/invoices/create"
+      }
+    });
+    
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://api.sandbox.zip.co/merchant/checkouts',
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': 'Bearer IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=', 
+        'Zip-Version': '2017-03-01', 
+        'Cookie': '__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA'
+      },
+      data : data,
+      withCredentials: true,
+    };
+    
+    console.log("Request prepared");
+    console.log(config);
+    
+    const checkoutResponse = await axios.request(config)
+    .then((response:any) => {
+      console.log(JSON.stringify(response.data));
+      console.log(response.error?.data);
+      return response.data;
+    })
+    .catch((error:any) => {
+      console.log(error);
+      console.log(error.data);
+      return error.data;
+    });
+
+    console.log("past request");
+       
         if (checkoutResponse.uri) {
             //await createInvoice(validatedFields.data.customerId, validatedFields.data.amount, validatedFields.data.status);
             redirect(checkoutResponse.uri)
