@@ -149,7 +149,7 @@ export async function createCheckout(prevState: State, formData: FormData) {
             }
         },
         "config": {
-            "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
+            "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
             "capture": capture
         },
         "metadata": {
@@ -196,7 +196,7 @@ export async function getCheckout(id: string) {
         headers: myHeaders
     };
 
-    return fetch("https://api.sandbox.zip.co/merchant/checkouts/" + id, requestOptions)
+    return fetch("https://api.sandbox.zip.co/merchant/checkouts" + id, requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
