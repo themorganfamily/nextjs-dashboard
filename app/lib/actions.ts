@@ -93,10 +93,11 @@ export async function createZipUser(prevState: State, formData: FormData) {
 }
 
 export async function createCheckout(prevState: State, formData: FormData) {
-
+    console.log("inside createCheckout");
     const user = await getUser("user@nextmail.com");
 
     const axios = require('axios');
+    console.log("past require Axios");
 let data = JSON.stringify({
   "shopper": {
     "first_name": "Test",
@@ -147,16 +148,21 @@ let config = {
     'Cookie': '__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA'
   },
   data : data,
-  withCredentials: false,
+  withCredentials: true,
 };
+
+console.log("Request prepared");
+console.log(config);
 
 return axios.request(config)
 .then((response:any) => {
   console.log(JSON.stringify(response.data));
+  console.log(response.error?.data);
   return response.data;
 })
 .catch((error:any) => {
   console.log(error);
+  console.log(error.data);
   return error.data;
 });
 
@@ -349,6 +355,7 @@ export async function validateCustomerForm(prevState: State, formData: FormData)
 
 export async function validateForm(prevState: State, formData: FormData) {
     console.log(formData);
+    
     const user = await getUser("user@nextmail.com");
     let validatedFields = CreateInvoice.safeParse({
         customerId: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
@@ -365,11 +372,15 @@ export async function validateForm(prevState: State, formData: FormData) {
         });
     } else {
         if (validatedFields.error !== undefined) {
+            console.log("Invalid (validateForm)");
             return {
                 errors: validatedFields.error.flatten().fieldErrors,
                 message: 'Missing Fields. Failed to Create Invoice.',
                 isLoading: false
             };
+        }
+        else {
+            console.log("Valid (validateForm)");
         }
 
     }
@@ -422,7 +433,7 @@ export async function redirectToZip(prevState: State, formData: FormData) {
     console.log(formData);
     const validForm = await validateForm(prevState, formData);
     if (validForm.message !== null && validForm.message !== undefined) {
-        console.log("invalid " + validForm.message);
+        console.log("Invalid (redirectToZip) " + validForm.message);
         const returnState:State = {
             errors: validForm.errors,
             message: validForm.message,
@@ -431,7 +442,7 @@ export async function redirectToZip(prevState: State, formData: FormData) {
         return returnState;
     }
     else {
-        console.log("Valid ");
+        console.log("Valid (redirectToZip)");
         const checkoutResponse = await createCheckout(prevState, formData)
         if (checkoutResponse.uri) {
             //await createInvoice(validatedFields.data.customerId, validatedFields.data.amount, validatedFields.data.status);
