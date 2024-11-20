@@ -104,6 +104,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
         myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
     }
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+    myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
 
     let capture = true;
 
@@ -160,7 +162,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
     const requestOptions = {
         method: "POST",
         headers: myHeaders,
-        body: raw
+        body: raw,
+        cors: true
     };
 
     return fetch("https://api.sandbox.zip.co/merchant/checkouts", requestOptions)
@@ -189,11 +192,14 @@ export async function getCheckout(id: string) {
         myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
     }
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+    myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
 
 
     const requestOptions = {
         method: "GET",
-        headers: myHeaders
+        headers: myHeaders,
+        cors: true
     };
 
     return fetch("https://api.sandbox.zip.co/merchant/checkouts" + id, requestOptions)
@@ -390,6 +396,9 @@ export async function createCharge(checkoutId: string, amount: number, capture: 
         myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
     }
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+    myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
+
 
     const raw = JSON.stringify({
         "authority": {
@@ -405,7 +414,8 @@ export async function createCharge(checkoutId: string, amount: number, capture: 
     const requestOptions = {
         method: "POST",
         headers: myHeaders,
-        body: raw
+        body: raw,
+        cors: true
     };
 
     return fetch("https://api.sandbox.zip.co/merchant/charges", requestOptions)
