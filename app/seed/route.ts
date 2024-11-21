@@ -40,7 +40,13 @@ async function seedInvoices() {
       customer_id UUID NOT NULL,
       amount INT NOT NULL,
       status VARCHAR(255) NOT NULL,
-      date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE
+      date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+      checkout_id VARCHAR(255),
+      charge_id VARCHAR(255),
+      receipt_number INT,
+      product VARCHAR(255),
+      interest_free_months INT,
+      reference VARCHAR(255)
     );
   `;
 

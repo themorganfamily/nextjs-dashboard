@@ -4,10 +4,10 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Integration Tools',
-    default: 'Integration Tools',
+    template: '%s | Testing Tools',
+    default: 'Testing Tools',
   },
-  description: 'The official Zip Integration Tools.',
+  description: 'Testing Tools.',
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
 };
 

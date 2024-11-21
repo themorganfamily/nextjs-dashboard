@@ -7,21 +7,21 @@ export default function InvoiceStatus({ status }: { status: string }) {
       className={clsx(
         'inline-flex items-center rounded-full px-2 py-1 text-xs',
         {
-          'bg-gray-100 text-gray-500': status === 'authorised',
-          'bg-green-500 text-white': status === 'captured',
+          'bg-gray-100': status === 'authorised',
+          'bg-green-200': status === 'captured',
         },
       )}
     >
       {status === 'authorised' ? (
         <>
           Authorised
-          <ClockIcon className="ml-1 w-4 text-gray-500" />
+          <ClockIcon className="ml-1 w-4 " />
         </>
       ) : null}
       {status === 'captured' ? (
         <>
           Complete
-          <CheckIcon className="ml-1 w-4 text-white" />
+          <CheckIcon className="ml-1 w-4 " />
         </>
       ) : null}
     </span>

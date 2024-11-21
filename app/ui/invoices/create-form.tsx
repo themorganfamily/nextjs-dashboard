@@ -141,7 +141,7 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
                 />
                 <label
                   htmlFor="authorised"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium bg-gray-100"
                 >
                   Authorise only <ClockIcon className="h-4 w-4" />
                 </label>
@@ -158,7 +158,7 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
                 />
                 <label
                   htmlFor="captured"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium bg-green-200"
                 >
                   Capture <CheckIcon className="h-4 w-4" />
                 </label>

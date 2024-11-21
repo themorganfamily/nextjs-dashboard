@@ -97,6 +97,10 @@ export async function fetchFilteredInvoices(
         invoices.amount,
         invoices.date,
         invoices.status,
+        invoices.reference,
+        invoices.receipt_number,
+        invoices.product,
+        invoices.interest_free_months,
         customers.name,
         customers.email,
         customers.image_url
@@ -107,7 +111,11 @@ export async function fetchFilteredInvoices(
         customers.email ILIKE ${`%${query}%`} OR
         invoices.amount::text ILIKE ${`%${query}%`} OR
         invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
+        invoices.status ILIKE ${`%${query}%`} OR
+        invoices.reference ILIKE ${`%${query}%`} OR
+        invoices.receipt_number::text ILIKE ${`%${query}%`} OR
+        invoices.product ILIKE ${`%${query}%`} OR
+        invoices.interest_free_months::text ILIKE ${`%${query}%`}
       ORDER BY invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;

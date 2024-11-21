@@ -380,7 +380,7 @@ export async function handleCheckoutResult(result: string, checkoutId: string) {
 
         if (checkout.state === 'approved') {
             const charge = await createCharge(checkoutId, checkout.order.amount, checkout.config.capture);
-            const orderResult = await createInvoice("d6e15727-9fe1-4961-8c5b-ea44a9bd81aa", charge.amount, charge.state);
+            const orderResult = await createInvoice(checkout, charge);
             console.log(orderResult);
             console.log(charge);
         }
@@ -639,12 +639,13 @@ export async function createCustomer(email: string) {
     // redirect('/dashboard/invoices');
 }
 
-export async function createInvoice(customerId: string, amount: number, status: string) {
+export async function createInvoice(checkout: any, charge: any) {
+// export async function createInvoice(customerId: string, amount: number, status: string) {
 
     // console.log("in createInvoice function");
     // Prepare data for insertion into the database
     // const { customerId, amount, status } = validatedFields.data;
-    const amountInCents = amount * 100;
+    const amountInCents = charge.amount * 100;
     var dateTime = new Date().toISOString().split('T');
     const date = dateTime[0] + " " + dateTime[1].split('Z')[0];
     // console.log(dateTime);
@@ -653,8 +654,8 @@ export async function createInvoice(customerId: string, amount: number, status: 
     try {
         // console.log("in SQL try function");
         await sql`
-        INSERT INTO invoices (customer_id, amount, status, date)
-        VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+        INSERT INTO invoices (customer_id, amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
+        VALUES ('d6e15727-9fe1-4961-8c5b-ea44a9bd81aa', ${amountInCents}, ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
       `;
     } catch (error) {
         // console.log("in SQL catch");

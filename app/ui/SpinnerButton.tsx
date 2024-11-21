@@ -20,6 +20,7 @@ export const SpinnerButton = ({
                     height="24"
                     width="85"
                     color="#FFFFFF"
+                    secondaryColor="#FFFFFF"
                     ariaLabel="oval-loading"
                     wrapperStyle={{minWidth:"85"}} // minWidth:"90"
                     wrapperClass=""

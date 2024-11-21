@@ -55,6 +55,10 @@ export type InvoicesTable = {
   date: string;
   amount: number;
   status: 'authorised' | 'captured';
+  reference: string;
+  receipt_number: string;
+  product: string;
+  interest_free_months: string;
 };
 
 export type CustomersTableType = {

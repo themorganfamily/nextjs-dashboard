@@ -25,7 +25,7 @@ export default async function Page() {
                         {/* Navigates back to the base URL - closing the modal */}
                         <Link
                             href="/dashboard"
-                            className="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                            className="px-4 py-2 zip-light-bg text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
                         >
                             Close
                         </Link>

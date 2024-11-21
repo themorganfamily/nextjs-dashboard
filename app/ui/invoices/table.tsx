@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
 import InvoiceStatus from '@/app/ui/invoices/status';
+import InvoiceProduct from '@/app/ui/invoices/product';
+import InvoiceIFM from '@/app/ui/invoices/terms';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredInvoices } from '@/app/lib/data';
 
@@ -37,6 +39,7 @@ export default async function InvoicesTable({
                     </div>
                     <p className="text-sm text-gray-500">{invoice.email}</p>
                   </div>
+                  {/* <InvoiceProduct product={invoice.product} /> */}
                   <InvoiceStatus status={invoice.status} />
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
@@ -46,6 +49,10 @@ export default async function InvoicesTable({
                     </p>
                     <p>{formatDateToLocal(invoice.date)}</p>
                   </div>
+                  {/* <p className="text-sm text-gray-500">{invoice.reference}</p>
+                  <p className="text-sm text-gray-500">{invoice.receipt_number}</p> */}
+                  
+                  {/* <InvoiceIFM product={invoice.product} interestFreeMonths={invoice.interest_free_months}/> */}
                   <div className="flex justify-end gap-2">
                     <UpdateInvoice id={invoice.id} />
                     <DeleteInvoice id={invoice.id} />
@@ -71,6 +78,18 @@ export default async function InvoicesTable({
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Status
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Reference
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Receipt
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Product
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Interest Free Months
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -106,6 +125,18 @@ export default async function InvoicesTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <InvoiceStatus status={invoice.status} />
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {invoice.reference}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {invoice.receipt_number}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                  <InvoiceProduct product={invoice.product} />
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                  <InvoiceIFM product={invoice.product} interestFreeMonths={invoice.interest_free_months} />
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

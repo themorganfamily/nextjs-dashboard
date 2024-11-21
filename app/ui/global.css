@@ -16,3 +16,91 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+
+/* Zip colours */
+.zip-lightest-bg {
+  background-color: #EDE6FF;
+}
+
+.zip-lighter-bg {
+  background-color: #DBCCFF;
+}
+
+.zip-light-bg {
+  background-color: #C9BCFF;
+}
+
+.zip-light-bg {
+  background-color: #C9BCFF;
+}
+
+.zip-fearlessness-bg {
+  background-color: #AA8FFF;
+}
+
+.zip-medium-bg {
+  background-color: #6542BE;
+}
+
+.zip-dark-bg {
+  background-color: #411361;
+}
+
+.zip-confidence-bg {
+  background-color: #1A0826;
+}
+
+.zip-lightest-text {
+  color: #EDE6FF;
+}
+
+.zip-lighter-text {
+  color: #DBCCFF;
+}
+
+.zip-light-text {
+  color: #C9BCFF;
+}
+
+.zip-fearlessness-text {
+    color: #AA8FFF;
+}
+
+.zip-fearlessness-text-hover {
+  :hover {
+    color: #AA8FFF;
+  }
+}
+
+.zip-medium-text {
+  color: #6542BE;
+}
+
+.zip-dark-text {
+  color: #411361;
+}
+
+.zip-lightest-border {
+  border-color: #EDE6FF;
+}
+
+.zip-lighter-border {
+  border-color: #DBCCFF;
+}
+
+.zip-light-border {
+  border-color: #C9BCFF;
+}
+
+.zip-fearlessness-border {
+  border-color: #AA8FFF;
+}
+
+.zip-medium-border {
+  border-color: #6542BE;
+}
+
+.zip-dark-border {
+  border-color: #411361;
+}
