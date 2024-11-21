@@ -51,7 +51,7 @@ export default async function InvoicesTable({
                   </div>
                   {/* <p className="text-sm text-gray-500">{invoice.reference}</p>
                   <p className="text-sm text-gray-500">{invoice.receipt_number}</p> */}
-                  
+
                   {/* <InvoiceIFM product={invoice.product} interestFreeMonths={invoice.interest_free_months}/> */}
                   <div className="flex justify-end gap-2">
                     <UpdateInvoice id={invoice.id} />
@@ -64,18 +64,19 @@ export default async function InvoicesTable({
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Email
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
-                </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Date
                 </th>
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                  Customer
+                </th>
+                {/* <th scope="col" className="px-3 py-5 font-medium">
+                  Email
+                </th> */}
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Amount
+                </th>
+
                 <th scope="col" className="px-3 py-5 font-medium">
                   Status
                 </th>
@@ -102,27 +103,29 @@ export default async function InvoicesTable({
                   key={invoice.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
+                  <td className="whitespace-nowrap px-3 py-3 ">
+                    <span className="rounded-full px-2 py-1 text-xs bg-gray-100"> {formatDateToLocal(invoice.date)} </span>
+                  </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
+
                     <div className="flex items-center gap-3">
-                      <Image
+                      {/* <Image
                         src={invoice.image_url}
                         className="rounded-full"
                         width={28}
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
-                      />
+                      /> */}
                       <p>{invoice.name}</p>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  {/* <td className="whitespace-nowrap px-3 py-3">
                     {invoice.email}
-                  </td>
+                  </td> */}
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(invoice.amount)}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(invoice.date)}
-                  </td>
+
                   <td className="whitespace-nowrap px-3 py-3">
                     <InvoiceStatus status={invoice.status} />
                   </td>
@@ -133,10 +136,10 @@ export default async function InvoicesTable({
                     {invoice.receipt_number}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                  <InvoiceProduct product={invoice.product} />
+                    <InvoiceProduct product={invoice.product} />
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                  <InvoiceIFM product={invoice.product} interestFreeMonths={invoice.interest_free_months} />
+                    <InvoiceIFM product={invoice.product} interestFreeMonths={invoice.interest_free_months} />
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

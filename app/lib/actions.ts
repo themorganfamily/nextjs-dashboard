@@ -1,12 +1,12 @@
 'use server';
 
-import { z } from 'zod';
+import { custom, z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import type { User } from '@/app/lib/definitions';
+import type { Customer, User } from '@/app/lib/definitions';
 // import axios from 'axios';
 // import { cookies } from "next/headers";
 // import { NextRequest, NextResponse } from 'next/server';
@@ -58,6 +58,16 @@ async function getUser(email: string): Promise<User | undefined> {
     } catch (error) {
         console.error('Failed to fetch user:', error);
         throw new Error('Failed to fetch user.');
+    }
+}
+
+async function getCustomer(email: string): Promise<Customer | undefined> {
+    try {
+        const customer = await sql<Customer>`SELECT * FROM customers WHERE email=${email}`;
+        return customer.rows[0];
+    } catch (error) {
+        console.error('Failed to fetch user:', error);
+        throw new Error('Failed to fetch customer.');
     }
 }
 
@@ -167,7 +177,7 @@ export async function createCheckout(prevState: State, formData: FormData) {
         body: raw,
         cors: true
     };
-    
+
     // return await fetch("https://api.sandbox.zip.co/merchant/v1/checkouts", requestOptions)
     return await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
         .then((response) => response.json())
@@ -380,7 +390,14 @@ export async function handleCheckoutResult(result: string, checkoutId: string) {
 
         if (checkout.state === 'approved') {
             const charge = await createCharge(checkoutId, checkout.order.amount, checkout.config.capture);
-            const orderResult = await createInvoice(checkout, charge);
+            const newCustomerEmail = await createCustomer(undefined, charge);
+            console.log("pastCreateCustomer");
+            console.log(newCustomerEmail);
+            const newCustomer = await getCustomer(newCustomerEmail);
+            console.log(newCustomer);
+            console.log(newCustomer?.id);
+
+            const orderResult = await createInvoice(checkout, charge, newCustomer);
             console.log(orderResult);
             console.log(charge);
         }
@@ -606,7 +623,7 @@ export async function createCharge(checkoutId: string, amount: number, capture: 
     console.log('hmm')
 }
 
-export async function createCustomer(email: string) {
+export async function createCustomer(email?: string, charge?: any) {
 
     // console.log("in createInvoice function");
     // Prepare data for insertion into the database
@@ -617,20 +634,47 @@ export async function createCustomer(email: string) {
     // console.log(dateTime);
     // console.log(date);
     // Insert data into the database
+    console.log("In createCustomer()");
+    
     try {
         // console.log("in SQL try function");
-        await sql`
+        // let data;
+        if (charge !== null && charge !== undefined) {
+            console.log("Charge exists");
+            //console.log(charge);
+           // console.log(charge.customer.first_name);
+            const name = charge.customer.first_name + ' ' + charge.customer.last_name;
+            console.log(name + ' ' + charge.customer.email);
+            await sql`
         INSERT INTO customers (name, email, image_url)
-        VALUES ("Tester Jones", ${email}, "/customers/evil-rabbit.png")
+        VALUES ( ${name}, ${charge.customer.email}, '/customers/evil-rabbit.png')
       `;
+            // console.log("Customer created");
+            // console.log(data);
+             return charge.customer.email;
+        }
+        else {
+            console.log('Charge does not exist');
+            console.log(email);
+            await sql`
+            INSERT INTO customers (name, email, image_url)
+            VALUES ('Test User', ${email}, '/customers/evil-rabbit.png')
+          `;
+            // console.log("Customer created");
+            // console.log(data);
+             return email;
+
+        }
+
     } catch (error) {
         // console.log("in SQL catch");
         // If a database error occurs, return a more specific error.
         return {
-            message: 'Database Error: Failed to Create Invoice.',
+            message: 'Database Error: Failed to Create Customer acc.',
+            error: error
         };
     }
-    console.log("Customer created");
+
     // return {
     //     message: 'Order created.',
     // };
@@ -639,8 +683,8 @@ export async function createCustomer(email: string) {
     // redirect('/dashboard/invoices');
 }
 
-export async function createInvoice(checkout: any, charge: any) {
-// export async function createInvoice(customerId: string, amount: number, status: string) {
+export async function createInvoice(checkout: any, charge: any, customer?: Customer) {
+    // export async function createInvoice(customerId: string, amount: number, status: string) {
 
     // console.log("in createInvoice function");
     // Prepare data for insertion into the database
@@ -653,15 +697,27 @@ export async function createInvoice(checkout: any, charge: any) {
     // Insert data into the database
     try {
         // console.log("in SQL try function");
-        await sql`
+        console.log (customer?.id);
+        if (customer !== null && customer !== undefined) {
+            console.log("customer not null");
+            console.log(customer);
+            await sql`
         INSERT INTO invoices (customer_id, amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
-        VALUES ('d6e15727-9fe1-4961-8c5b-ea44a9bd81aa', ${amountInCents}, ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
+        VALUES (${customer.id}, ${amountInCents}, ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
       `;
+        }
+        else {
+            console.log("customer is null");
+            await sql`
+            INSERT INTO invoices (customer_id, amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
+            VALUES ('d6e15727-9fe1-4961-8c5b-ea44a9bd81aa', ${amountInCents}, ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
+          `;
+        }
     } catch (error) {
         // console.log("in SQL catch");
         // If a database error occurs, return a more specific error.
         return {
-            message: 'Database Error: Failed to Create Invoice.',
+            message: 'Database Error: Failed to Create Order.',
         };
     }
     console.log("Order created");
