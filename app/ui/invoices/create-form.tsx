@@ -50,7 +50,7 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
 
   }
 
-  const [state, formAction] = useActionState(redirectToZip, initialState);
+  const [state, formAction] = useActionState(serverSubmit, initialState);
 
   if (state.message !== null) {
     amount = undefined;
@@ -165,6 +165,7 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
               </div>
             </div>
           </div>
+
           <div id="status-error" aria-live="polite" aria-atomic="true">
             {state.errors?.status &&
               state.errors.status.map((error: string) => (
@@ -179,7 +180,6 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
             </p>
           </div>
         </fieldset>
-        
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link

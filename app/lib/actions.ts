@@ -48,8 +48,8 @@ const FormSchema = z.object({
     }),
 });
 
-const CreateInvoice = FormSchema.omit({ id: true, date: true, email: true, accType: true});
-const CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true});
+const CreateInvoice = FormSchema.omit({ id: true, date: true, email: true, accType: true });
+const CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true });
 
 async function getUser(email: string): Promise<User | undefined> {
     try {
@@ -72,7 +72,7 @@ export async function createZipUser(prevState: State, formData: FormData) {
         "token": "AutomationTest"
     });
 
-    if(formData.get("email") !== undefined && formData.get("email") !== "") {
+    if (formData.get("email") !== undefined && formData.get("email") !== "") {
         raw = JSON.stringify({
             "product": "zpv2",
             "env": "sandbox",
@@ -89,12 +89,94 @@ export async function createZipUser(prevState: State, formData: FormData) {
 
     return fetch("https://zip-qa-createuser.internal.sand.au.edge.zip.co/createuser", requestOptions)
         .then((response) => response.json())
-        .then((result) => {console.log(result); return result})
+        .then((result) => { console.log(result); return result })
         .catch((error) => console.error(error));
 
 }
 
-// export async function createCheckout(prevState: State, formData: FormData) {
+export async function createCheckout(prevState: State, formData: FormData) {
+    const user = await getUser("user@nextmail.com");
+
+    const myHeaders = new Headers();
+    if (user !== undefined) {
+        myHeaders.append("Authorization", "Bearer " + user.key);
+    }
+    else {
+        myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
+    }
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+    myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
+
+    let capture = true;
+
+    if (formData.get("status") === "pending") {
+        capture = false;
+    }
+
+    const raw = JSON.stringify({
+        "shopper": {
+            "first_name": "Test1",
+            "last_name": "Testington",
+            "email": "test.tester@testing.com",
+            "billing_address": {
+                "first_name": "Test",
+                "last_name": "Tester",
+                "line1": "10 Spring St",
+                "city": "Sydney",
+                "state": "NSW",
+                "postal_code": "2000",
+                "country": "AU"
+            }
+        },
+        "order": {
+            "reference": "example_ref",
+            "amount": formData.get("amount"),
+            "currency": "AUD",
+            "shipping": {
+                "pickup": true
+            },
+            "items": [
+                {
+                    "name": "Test Item",
+                    "type": "sku",
+                    "reference": "1111111",
+                    "quantity": 1,
+                    "amount": "3000"
+                }
+            ]
+        },
+        "features": {
+            "tokenisation": {
+                "required": true
+            }
+        },
+        "config": {
+            // "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
+            "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
+            "capture": capture
+        },
+        "metadata": {
+            "platform": "Test"
+        }
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        cors: true
+    };
+
+    return await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            return result;
+        })
+        .catch((error) => console.error(error));
+
+}
 //     console.log("inside createCheckout");
 //     const user = await getUser("user@nextmail.com");
 
@@ -169,89 +251,89 @@ export async function createZipUser(prevState: State, formData: FormData) {
 // });
 
 
-    // const myHeaders = new Headers();
-    // if (user !== undefined) {
-    //     myHeaders.append("Authorization", "Bearer " + user.key);
-    // }
-    // else {
-    //     myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
-    // }
-    // myHeaders.append("Content-Type", "application/json");
-    // myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
-    // myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
+// const myHeaders = new Headers();
+// if (user !== undefined) {
+//     myHeaders.append("Authorization", "Bearer " + user.key);
+// }
+// else {
+//     myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
+// }
+// myHeaders.append("Content-Type", "application/json");
+// myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+// myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
 
-    // let capture = true;
+// let capture = true;
 
-    // if (formData.get("status") === "pending") {
-    //     capture = false;
-    // }
+// if (formData.get("status") === "pending") {
+//     capture = false;
+// }
 
-    // const raw = JSON.stringify({
-    //     "shopper": {
-    //         "first_name": "Test1",
-    //         "last_name": "Testington",
-    //         "email": "test.tester@testing.com",
-    //         "billing_address": {
-    //             "first_name": "Test",
-    //             "last_name": "Tester",
-    //             "line1": "10 Spring St",
-    //             "city": "Sydney",
-    //             "state": "NSW",
-    //             "postal_code": "2000",
-    //             "country": "AU"
-    //         }
-    //     },
-    //     "order": {
-    //         "reference": "example_ref",
-    //         "amount": formData.get("amount"),
-    //         "currency": "AUD",
-    //         "shipping": {
-    //             "pickup": true
-    //         },
-    //         "items": [
-    //             {
-    //                 "name": "Test Item",
-    //                 "type": "sku",
-    //                 "reference": "1111111",
-    //                 "quantity": 1,
-    //                 "amount": "3000"
-    //             }
-    //         ]
-    //     },
-    //     "features": {
-    //         "tokenisation": {
-    //             "required": true
-    //         }
-    //     },
-    //     "config": {
-    //         "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
-    //         // "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
-    //         "capture": capture
-    //     },
-    //     "metadata": {
-    //         "platform": "Test"
-    //     }
-    // });
+// const raw = JSON.stringify({
+//     "shopper": {
+//         "first_name": "Test1",
+//         "last_name": "Testington",
+//         "email": "test.tester@testing.com",
+//         "billing_address": {
+//             "first_name": "Test",
+//             "last_name": "Tester",
+//             "line1": "10 Spring St",
+//             "city": "Sydney",
+//             "state": "NSW",
+//             "postal_code": "2000",
+//             "country": "AU"
+//         }
+//     },
+//     "order": {
+//         "reference": "example_ref",
+//         "amount": formData.get("amount"),
+//         "currency": "AUD",
+//         "shipping": {
+//             "pickup": true
+//         },
+//         "items": [
+//             {
+//                 "name": "Test Item",
+//                 "type": "sku",
+//                 "reference": "1111111",
+//                 "quantity": 1,
+//                 "amount": "3000"
+//             }
+//         ]
+//     },
+//     "features": {
+//         "tokenisation": {
+//             "required": true
+//         }
+//     },
+//     "config": {
+//         "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
+//         // "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
+//         "capture": capture
+//     },
+//     "metadata": {
+//         "platform": "Test"
+//     }
+// });
 
-    // const requestOptions = {
-    //     method: "POST",
-    //     headers: myHeaders,
-    //     body: raw,
-    //     cors: true
-    // };
+// const requestOptions = {
+//     method: "POST",
+//     headers: myHeaders,
+//     body: raw,
+//     cors: true
+// };
 
-    // return fetch("https://api.sandbox.zip.co/merchant/checkouts", requestOptions)
-    //     .then((response) => response.json())
-    //     .then((result) => {
-    //         console.log(result);
-    //         return result;
-    //     })
-    //     .catch((error) => console.error(error));
+// return fetch("https://api.sandbox.zip.co/merchant/checkouts", requestOptions)
+//     .then((response) => response.json())
+//     .then((result) => {
+//         console.log(result);
+//         return result;
+//     })
+//     .catch((error) => console.error(error));
 
-    // // Revalidate the cache for the invoices page and redirect the user.
-    // // revalidatePath('/dashboard/invoices');
-    // //redirect('/dashboard/invoices');
-    // console.log('hmm')
+// // Revalidate the cache for the invoices page and redirect the user.
+// // revalidatePath('/dashboard/invoices');
+// //redirect('/dashboard/invoices');
+// console.log('hmm')
 //}
 
 export async function getCheckout(id: string) {
@@ -294,8 +376,8 @@ export async function handleCheckoutResult(result: string, checkoutId: string) {
         // Place charge
         console.log("Checkout was " + result + " - " + checkoutId);
         const checkout = await getCheckout(checkoutId);
-       
-        if(checkout.state != 'completed'){
+
+        if (checkout.state != 'completed') {
             const charge = await createCharge(checkoutId, checkout.order.amount, checkout.config.capture);
             const orderResult = await createInvoice("d6e15727-9fe1-4961-8c5b-ea44a9bd81aa", checkout.order.amount, "paid");
             console.log(orderResult);
@@ -331,7 +413,7 @@ export async function validateCustomerForm(prevState: State, formData: FormData)
         accType: formData.get("accType"),
     });
     console.log("test" + validatedFields.error);
-  
+
     if (validatedFields.error !== undefined) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
@@ -340,7 +422,7 @@ export async function validateCustomerForm(prevState: State, formData: FormData)
         };
     }
 
-    
+
 
     // If form validation fails, return errors early. Otherwise, continue.
     // if (!validatedFields.success) {
@@ -359,7 +441,7 @@ export async function validateCustomerForm(prevState: State, formData: FormData)
 
 export async function validateForm(prevState: State, formData: FormData) {
     console.log(formData);
-    
+
     const user = await getUser("user@nextmail.com");
     let validatedFields = CreateInvoice.safeParse({
         customerId: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
@@ -410,7 +492,7 @@ export async function createUser(prevState: State, formData: FormData) {
     const validForm = await validateCustomerForm(prevState, formData);
     if (validForm.message !== null && validForm.message !== undefined) {
         //console.log("invalid " + validForm.message);
-        const returnState:State = {
+        const returnState: State = {
             errors: validForm.errors,
             message: validForm.message,
             isLoading: false
@@ -418,15 +500,15 @@ export async function createUser(prevState: State, formData: FormData) {
         return returnState;
     }
     else {
-       // console.log("Valid ");
+        // console.log("Valid ");
         const zipUserResponse = await createZipUser(prevState, formData)
         if (zipUserResponse.email) {
             //await createInvoice(validatedFields.data.customerId, validatedFields.data.amount, validatedFields.data.status);
             const customerResult = await createCustomer(zipUserResponse.email);
             redirect('/dashboard/customers?email=' + zipUserResponse.email);
         }
-       // console.log("tets");
-       const returnState:State = { message: null, errors: {} , isLoading: false};
+        // console.log("tets");
+        const returnState: State = { message: null, errors: {}, isLoading: false };
         return returnState;
     }
 
@@ -438,7 +520,7 @@ export async function redirectToZip(prevState: State, formData: FormData) {
     const validForm = await validateForm(prevState, formData);
     if (validForm.message !== null && validForm.message !== undefined) {
         console.log("Invalid (redirectToZip) " + validForm.message);
-        const returnState:State = {
+        const returnState: State = {
             errors: validForm.errors,
             message: validForm.message,
             isLoading: false
@@ -449,172 +531,22 @@ export async function redirectToZip(prevState: State, formData: FormData) {
         console.log("Valid (redirectToZip)");
 
         console.log("inside createCheckout");
-        const user = await getUser("user@nextmail.com");
+        const checkoutResponse = await createCheckout(prevState, formData);
 
-            const myHeaders = new Headers();
-    if (user !== undefined) {
-        myHeaders.append("Authorization", "Bearer " + user.key);
-    }
-    else {
-        myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
-    }
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
-    myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
+        // Revalidate the cache for the invoices page and redirect the user.
+        // revalidatePath('/dashboard/invoices');
+        //redirect('/dashboard/invoices');
+        console.log('hmm')
 
-    let capture = true;
+        console.log("past request");
 
-    if (formData.get("status") === "pending") {
-        capture = false;
-    }
-
-    const raw = JSON.stringify({
-        "shopper": {
-            "first_name": "Test1",
-            "last_name": "Testington",
-            "email": "test.tester@testing.com",
-            "billing_address": {
-                "first_name": "Test",
-                "last_name": "Tester",
-                "line1": "10 Spring St",
-                "city": "Sydney",
-                "state": "NSW",
-                "postal_code": "2000",
-                "country": "AU"
-            }
-        },
-        "order": {
-            "reference": "example_ref",
-            "amount": formData.get("amount"),
-            "currency": "AUD",
-            "shipping": {
-                "pickup": true
-            },
-            "items": [
-                {
-                    "name": "Test Item",
-                    "type": "sku",
-                    "reference": "1111111",
-                    "quantity": 1,
-                    "amount": "3000"
-                }
-            ]
-        },
-        "features": {
-            "tokenisation": {
-                "required": true
-            }
-        },
-        "config": {
-            "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
-            // "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
-            "capture": capture
-        },
-        "metadata": {
-            "platform": "Test"
-        }
-    });
-
-    const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        cors: true
-    };
-
-    const checkoutResponse = await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-            console.log(result);
-            return result;
-        })
-        .catch((error) => console.error(error));
-
-    // Revalidate the cache for the invoices page and redirect the user.
-    // revalidatePath('/dashboard/invoices');
-    //redirect('/dashboard/invoices');
-    console.log('hmm')
-
-    
-    //     // const axios = require('axios');
-    //     console.log("past require Axios");
-    // let data = JSON.stringify({
-    //   "shopper": {
-    //     "first_name": "Test",
-    //     "last_name": "Testing",
-    //     "phone": "555",
-    //     "email": "testemail@tester.com",
-    //     "billing_address": {
-    //       "line1": "20 Test Ave",
-    //       "city": "TESTTOWN",
-    //       "state": "NSW",
-    //       "postal_code": "2517",
-    //       "country": "AU"
-    //     }
-    //   },
-    //   "order": {
-    //     "reference": "ref_2",
-    //     "amount": formData.get("amount"),
-    //     "currency": "AUD",
-    //     "shipping": {
-    //       "pickup": false,
-    //       "address": {
-    //         "line1": "20 Test Ave",
-    //         "city": "TESTTOWN",
-    //         "state": "NSW",
-    //         "postal_code": "2517",
-    //         "country": "AU"
-    //       }
-    //     }
-    //   },
-    //   "features": {
-    //     "tokenisation": {
-    //       "required": true
-    //     }
-    //   },
-    //   "config": {
-    //     "redirect_uri": "http://localhost:3000/dashboard/invoices/create"
-    //   }
-    // });
-    
-    // let config = {
-    //   method: 'post',
-    //   maxBodyLength: Infinity,
-    //   url: 'https://api.sandbox.zip.co/merchant/checkouts',
-    //   headers: { 
-    //     'Content-Type': 'application/json', 
-    //     'Authorization': 'Bearer IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=', 
-    //     'Zip-Version': '2017-03-01', 
-    //     'Cookie': cookies().toString()
-    //   },
-    //   data : data,
-    //   credentials: 'include'
-    // };
-    
-    // console.log("Request prepared");
-    // console.log(config);
-    
-    // const checkoutResponse = await axios.request(config)
-    // .then((response:any) => {
-    //   console.log(JSON.stringify(response.data));
-    //   console.log(response.error?.data);
-    //   return response.data;
-    // })
-    // .catch((error:any) => {
-    //   console.log(error);
-    //   console.log(error.data);
-    //   return error.data;
-    // });
-
-    console.log("past request");
-       
         if (checkoutResponse.uri) {
             //await createInvoice(validatedFields.data.customerId, validatedFields.data.amount, validatedFields.data.status);
             console.log(checkoutResponse.uri);
             redirect(checkoutResponse.uri)
         }
-       // console.log("tets");
-       const returnState:State = { message: null, errors: {} , isLoading: false};
+        // console.log("tets");
+        const returnState: State = { message: null, errors: {}, isLoading: false };
         return returnState;
     }
 
@@ -678,14 +610,14 @@ export async function createCustomer(email: string) {
     // console.log("in createInvoice function");
     // Prepare data for insertion into the database
     // const { customerId, amount, status } = validatedFields.data;
-    
+
     // var dateTime = new Date().toISOString().split('T');
     // const date = dateTime[0] + " " + dateTime[1].split('Z')[0];
     // console.log(dateTime);
     // console.log(date);
     // Insert data into the database
     try {
-       // console.log("in SQL try function");
+        // console.log("in SQL try function");
         await sql`
         INSERT INTO customers (name, email, image_url)
         VALUES ("Tester Jones", ${email}, "/customers/evil-rabbit.png")
@@ -718,7 +650,7 @@ export async function createInvoice(customerId: string, amount: number, status: 
     // console.log(date);
     // Insert data into the database
     try {
-       // console.log("in SQL try function");
+        // console.log("in SQL try function");
         await sql`
         INSERT INTO invoices (customer_id, amount, status, date)
         VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
