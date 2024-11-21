@@ -152,8 +152,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
             }
         },
         "config": {
-            // "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
-            "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
+            "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
+            // "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
             "capture": capture
         },
         "metadata": {
@@ -167,8 +167,9 @@ export async function createCheckout(prevState: State, formData: FormData) {
         body: raw,
         cors: true
     };
-
-    return await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
+    
+    return await fetch("https://api.sandbox.zip.co/merchant/v1/checkouts", requestOptions)
+    // return await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
