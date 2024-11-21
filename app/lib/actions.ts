@@ -168,8 +168,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
         cors: true
     };
     
-    return await fetch("https://api.sandbox.zip.co/merchant/v1/checkouts", requestOptions)
-    // return await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
+    // return await fetch("https://api.sandbox.zip.co/merchant/v1/checkouts", requestOptions)
+    return await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/checkouts", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
