@@ -133,7 +133,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="pending"
+                  id="authorised"
                   name="accType"
                   type="radio"
                   value="zpv2"
@@ -141,7 +141,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   aria-describedby="status-error"
                 />
                 <label
-                  htmlFor="pending"
+                  htmlFor="authorised"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   Zip Pay 
@@ -150,7 +150,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               </div>
               <div className="flex items-center">
                 <input
-                  id="paid"
+                  id="captured"
                   name="accType"
                   type="radio"
                   value="zmv2"
@@ -159,7 +159,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   defaultChecked
                 />
                 <label
-                  htmlFor="paid"
+                  htmlFor="captured"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"

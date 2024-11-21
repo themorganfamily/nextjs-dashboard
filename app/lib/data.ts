@@ -56,8 +56,8 @@ export async function fetchCardData() {
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const invoiceStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
-         SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
+         SUM(CASE WHEN status = 'captured' THEN amount ELSE 0 END) AS "captured",
+         SUM(CASE WHEN status = 'authorised' THEN amount ELSE 0 END) AS "authorised"
          FROM invoices`;
 
     const data = await Promise.all([
@@ -68,14 +68,14 @@ export async function fetchCardData() {
 
     const numberOfInvoices = Number(data[0].rows[0].count ?? '0');
     const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
-    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
-    const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
+    const totalCapturedInvoices = formatCurrency(data[2].rows[0].captured ?? '0');
+    const totalAuthorisedInvoices = formatCurrency(data[2].rows[0].authorised ?? '0');
 
     return {
       numberOfCustomers,
       numberOfInvoices,
-      totalPaidInvoices,
-      totalPendingInvoices,
+      totalCapturedInvoices,
+      totalAuthorisedInvoices,
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -193,8 +193,8 @@ export async function fetchFilteredCustomers(query: string) {
 		  customers.email,
 		  customers.image_url,
 		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
+		  SUM(CASE WHEN invoices.status = 'authorised' THEN invoices.amount ELSE 0 END) AS total_authorised,
+		  SUM(CASE WHEN invoices.status = 'captured' THEN invoices.amount ELSE 0 END) AS total_captured
 		FROM customers
 		LEFT JOIN invoices ON customers.id = invoices.customer_id
 		WHERE
@@ -206,8 +206,8 @@ export async function fetchFilteredCustomers(query: string) {
 
     const customers = data.rows.map((customer) => ({
       ...customer,
-      total_pending: formatCurrency(customer.total_pending),
-      total_paid: formatCurrency(customer.total_paid),
+      total_authorised: formatCurrency(customer.total_authorised),
+      total_captured: formatCurrency(customer.total_captured),
     }));
 
     return customers;

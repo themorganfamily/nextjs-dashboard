@@ -36,7 +36,7 @@ const FormSchema = z.object({
         invalid_type_error: 'Please select a customer.',
     }),
     amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
-    status: z.enum(['pending', 'paid'], {
+    status: z.enum(['authorised', 'captured'], {
         invalid_type_error: 'Please select an order status.',
     }),
     date: z.string(),
@@ -110,7 +110,7 @@ export async function createCheckout(prevState: State, formData: FormData) {
 
     let capture = true;
 
-    if (formData.get("status") === "pending") {
+    if (formData.get("status") === "authorised") {
         capture = false;
     }
 
@@ -264,7 +264,7 @@ export async function createCheckout(prevState: State, formData: FormData) {
 
 // let capture = true;
 
-// if (formData.get("status") === "pending") {
+// if (formData.get("status") === "authorised") {
 //     capture = false;
 // }
 
@@ -377,9 +377,9 @@ export async function handleCheckoutResult(result: string, checkoutId: string) {
         console.log("Checkout was " + result + " - " + checkoutId);
         const checkout = await getCheckout(checkoutId);
 
-        if (checkout.state != 'completed') {
+        if (checkout.state === 'approved') {
             const charge = await createCharge(checkoutId, checkout.order.amount, checkout.config.capture);
-            const orderResult = await createInvoice("d6e15727-9fe1-4961-8c5b-ea44a9bd81aa", checkout.order.amount, "paid");
+            const orderResult = await createInvoice("d6e15727-9fe1-4961-8c5b-ea44a9bd81aa", charge.amount, charge.state);
             console.log(orderResult);
             console.log(charge);
         }

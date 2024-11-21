@@ -18,8 +18,8 @@ export default async function Page() {
   // const {
   //   numberOfInvoices,
   //   numberOfCustomers,
-  //   totalPaidInvoices,
-  //   totalPendingInvoices,
+  //   totalCapturedInvoices,
+  //   totalAuthorisedInvoices,
   // } = await fetchCardData();
 
   return (
@@ -31,8 +31,8 @@ export default async function Page() {
         <Suspense fallback={<CardsSkeleton />}>
           <CardWrapper />
         </Suspense>
-        {/* <Card title="Collected" value={totalPaidInvoices} type="collected" />
-        <Card title="Pending" value={totalPendingInvoices} type="pending" />
+        {/* <Card title="Collected" value={totalCapturedInvoices} type="collected" />
+        <Card title="Pending" value={totalAuthorisedInvoices} type="pending" />
         <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
         <Card
           title="Total Customers"
