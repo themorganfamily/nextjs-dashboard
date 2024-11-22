@@ -165,8 +165,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
             }
         },
         "config": {
-            "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
-            // "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
+            // "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
+            "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
             "capture": capture,
             "credit_product_id": formData.get("creditProductId")
         },
