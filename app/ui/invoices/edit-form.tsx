@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
+import { CreditProduct, CustomerField, InvoiceForm } from '@/app/lib/definitions';
 import { updateInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 import {
@@ -15,7 +15,7 @@ import { Button } from '@/app/ui/button';
 
 export default function EditInvoiceForm({
   invoice,
-  customers,
+  customers
 }: {
   invoice: InvoiceForm;
   customers: CustomerField[];
@@ -140,6 +140,7 @@ export default function EditInvoiceForm({
                 </p>
               ))}
           </div>
+         
           <div id="form-error" aria-live="polite" aria-atomic="true">
             <p className="mt-2 text-sm text-red-500">
               {state.message}

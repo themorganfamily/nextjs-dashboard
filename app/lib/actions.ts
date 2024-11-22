@@ -46,6 +46,9 @@ const FormSchema = z.object({
     accType: z.enum(['zpv2', 'zmv2', "Both"], {
         invalid_type_error: 'Please select an account type.',
     }),
+    creditProductId: z.string({
+        invalid_type_error: 'Please select a credit product.',
+    }),
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true, email: true, accType: true });
@@ -164,7 +167,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
         "config": {
             "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
             // "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
-            "capture": capture
+            "capture": capture,
+            "credit_product_id": formData.get("creditProductId")
         },
         "metadata": {
             "platform": "Test"
@@ -465,6 +469,7 @@ export async function validateForm(prevState: State, formData: FormData) {
         customerId: "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
         amount: formData.get("amount"),
         status: formData.get("status"),
+        creditProductId: "",
     });
 
     if (user !== undefined) {
@@ -473,6 +478,7 @@ export async function validateForm(prevState: State, formData: FormData) {
             customerId: user.customerid,
             amount: formData.get("amount"),
             status: formData.get("status"),
+            creditProductId: formData.get("creditProductId"),
         });
     } else {
         if (validatedFields.error !== undefined) {
@@ -765,13 +771,14 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
+        creditProductId: formData.get('creditProductId'),
     });
 
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Update Invoice.',
-            isLoading: false
+            isLoading: false,
         };
     }
 
@@ -813,6 +820,8 @@ export type State = {
         status?: string[];
         email?: string[];
         accType?: string[];
+        creditProductId?: string[];
+
     };
     message?: string | null;
     isLoading?: boolean | null;

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { SpinnerButton } from "../SpinnerButton"
-import { CustomerField } from '@/app/lib/definitions';
+import { CreditProduct, CustomerField } from '@/app/lib/definitions';
 import { useActionState } from 'react';
 import { State, redirectToZip } from '@/app/lib/actions';
 import Link from 'next/link';
@@ -11,16 +11,13 @@ import {
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
+  SwatchIcon
 } from '@heroicons/react/24/outline';
 import { getParsedType } from "zod";
 
 
 
-
-
-
-
-export default function Form({ customers, amount }: { customers: CustomerField[], amount: number | undefined }) {
+export default function Form({ customers, amount, creditProducts }: { customers: CustomerField[], amount: number | undefined, creditProducts: CreditProduct[]}) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   var initialState: State = { message: null, errors: {}, isLoading: false };
   var clientSideValidation = false;
@@ -123,6 +120,40 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
           </div>
         </div>
 
+          {/* Credit product Name */}
+          <div className="mb-4">
+          <label htmlFor="creditProduct" className="mb-2 mt-4 block text-sm font-medium">
+            Choose credit product
+          </label>
+          <div className="relative">
+            <select
+              id="creditProduct"
+              name="creditProductId"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue=""
+              aria-describedby="creditProduct-error"
+            >
+              <option value="" disabled>
+                Select a credit product
+              </option>
+              {creditProducts.map((creditProduct) => (
+                <option key={creditProduct.id} value={creditProduct.id}>
+                  {creditProduct.name}
+                </option>
+              ))}
+            </select>
+            <SwatchIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+          <div id="creditProduct-error" aria-live="polite" aria-atomic="true">
+            {state.errors?.creditProductId &&
+              state.errors.creditProductId.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
+        </div>
+
         {/* Invoice Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
@@ -174,6 +205,9 @@ export default function Form({ customers, amount }: { customers: CustomerField[]
                 </p>
               ))}
           </div>
+
+             
+
           <div id="form-error" aria-live="polite" aria-atomic="true">
             <p className="mt-2 text-sm text-red-500">
               {state.message}
