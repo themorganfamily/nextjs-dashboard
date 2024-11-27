@@ -37,7 +37,7 @@ const FormSchema = z.object({
         invalid_type_error: 'Please select a customer.',
     }),
     amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
-    status: z.enum(['authorised', 'captured', 'cancelled', 'refunded','partially refunded','deleted'], {
+    status: z.enum(['authorised', 'captured', 'cancelled', 'refunded','partially refunded','deleted', 'partially captured'], {
         invalid_type_error: 'Please select an order status.',
     }),
     date: z.string(),
@@ -669,6 +669,88 @@ export async function createCharge(checkoutId: string, amount: number, capture: 
     console.log('hmm')
 }
 
+export async function captureCharge(chargeId: string, amount: number) {
+
+    console.log(chargeId + " " + amount);
+    const user = await getUser("user@nextmail.com");
+
+    const myHeaders = new Headers();
+    if (user !== undefined) {
+        myHeaders.append("Authorization", "Bearer " + user.key);
+    }
+    else {
+        myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
+    }
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+    myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
+
+
+    const raw = JSON.stringify({
+        "charge_id": chargeId,
+        "reference": "ref_" + Math.floor(Math.random() * 10000),
+        "amount": amount,
+        "currency": "AUD",
+        "is_partial_capture": false
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        cors: true
+    };
+
+    return fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/charges/" + chargeId + "/capture", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            return result;
+        })
+        .catch((error) => console.error(error));
+
+    // Revalidate the cache for the invoices page and redirect the user.
+    // revalidatePath('/dashboard/invoices');
+    //redirect('/dashboard/invoices');
+    console.log('hmm')
+}
+
+export async function cancelCharge(chargeId: string) {
+
+    console.log(chargeId);
+    const user = await getUser("user@nextmail.com");
+
+    const myHeaders = new Headers();
+    if (user !== undefined) {
+        myHeaders.append("Authorization", "Bearer " + user.key);
+    }
+    else {
+        myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
+    }
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+    myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        cors: true
+    };
+
+    return fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/charges/" + chargeId + "/cancel", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            return result;
+        })
+        .catch((error) => console.error(error));
+
+    // Revalidate the cache for the invoices page and redirect the user.
+    // revalidatePath('/dashboard/invoices');
+    //redirect('/dashboard/invoices');
+    console.log('hmm')
+}
+
 export async function createCustomer(email?: string, charge?: any) {
 
     // console.log("in createInvoice function");
@@ -765,6 +847,7 @@ export async function createInvoice(checkout: any, charge: any, customer?: Custo
     } catch (error) {
         // console.log("in SQL catch");
         // If a database error occurs, return a more specific error.
+        console.log(error);
         return {
             message: 'Database Error: Failed to Create Order.',
         };
@@ -805,7 +888,7 @@ export async function createInvoice(checkout: any, charge: any, customer?: Custo
 // }
 
 // Use Zod to update the expected types
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+const UpdateInvoice = FormSchema.omit({ id: true, date: true , email: true, creditProductId: true, accType: true});
 
 // ...
 
@@ -817,6 +900,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     });
 
     if (!validatedFields.success) {
+        console.log(validatedFields.error.flatten().fieldErrors);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Update Invoice.',
@@ -826,36 +910,83 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
 
     const invoice = await fetchInvoiceById (id);
 
-    var { customerId, amount, status, creditProductId } = validatedFields.data;
+   
+    var { customerId, amount, status } = validatedFields.data;
 
     const amountInCents = amount * 100;
     const invoiceAmountInCents = invoice.amount * 100;
 
-    const newAmount = amountInCents - invoiceAmountInCents
+    const newAmount = invoiceAmountInCents - amountInCents;
 
     if (newAmount < 0) {
         return {
             errors: {},
-            message: 'Invalid amount. Refunds must be less than or equal to the original order amount. (update)',
+            message: 'Invalid amount. Capture must be less than or equal to the original order amount.',
             isLoading: false,
         };
     }
 
+    var amountToSet = amountInCents;
+
     if (status === 'refunded' && newAmount > 0) {
-        status = 'partially refunded'
+        status = 'partially refunded';
+        amountToSet = newAmount;
     }
 
-    try {
-        await sql`
-            UPDATE invoices
-            SET amount = ${newAmount}, status = ${status}
-            WHERE id = ${id}
-        `;
-    } catch (error) {
-        return {
-            message: 'Database Error: Failed to Update Invoice.',
-        };
+    if (status === 'captured' && newAmount > 0) {
+        //status = 'partially captured';
     }
+
+
+    if (status === 'captured') {
+        const captureResponse = await captureCharge(invoice.charge_id, amountToSet/100);
+        console.log("precapture")
+        console.log(captureResponse);
+
+        try {
+            await sql`
+                UPDATE invoices
+                SET amount = ${amountToSet}, captured_amount = ${amountToSet}, status = ${status}
+                WHERE id = ${id}
+            `;
+        } catch (error) {
+            return {
+                message: 'Database Error: Failed to Update Invoice.1',
+            };
+        }
+    }
+    else if (status === 'cancelled') {
+        const cancelResponse = await cancelCharge(invoice.charge_id);
+        console.log("preCancel")
+        console.log(cancelResponse);
+
+        try {
+            await sql`
+                UPDATE invoices
+                SET status = ${status}
+                WHERE id = ${id}
+            `;
+        } catch (error) {
+            return {
+                message: 'Database Error: Failed to Update Invoice.1',
+            };
+        }
+    }
+    else {
+        try {
+            await sql`
+                UPDATE invoices
+                SET captured_amount = ${newAmount}, status = ${status}
+                WHERE id = ${id}
+            `;
+        } catch (error) {
+            return {
+                message: 'Database Error: Failed to Update Invoice.1',
+            };
+        }
+    }
+/// Is this the issue?
+    
 
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
@@ -879,7 +1010,7 @@ export async function deleteInvoice(id: string, prevState: State, formData: Form
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Update Invoice.1',
+            message: 'Missing Fields. Failed to Update Invoice.',
             isLoading: false,
         };
     }

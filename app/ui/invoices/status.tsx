@@ -12,6 +12,7 @@ export default function InvoiceStatus({ status }: { status: string }) {
           'bg-red-100 ': status === 'cancelled',
           'bg-gray-100': status === 'authorised',
           'bg-green-200': status === 'captured',
+          'bg-green-200 ': status === 'partially captured',
         },
       )}
     >
@@ -35,7 +36,13 @@ export default function InvoiceStatus({ status }: { status: string }) {
       ) : null}
       {status === 'captured' ? (
         <>
-          Complete
+          Captured
+          <CheckIcon className="ml-1 w-4 " />
+        </>
+      ) : null}
+       {status === 'partially captured' ? (
+        <>
+          Partially Captured
           <CheckIcon className="ml-1 w-4 " />
         </>
       ) : null}
