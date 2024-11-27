@@ -44,7 +44,7 @@ const FormSchema = z.object({
     email: z.string({
         invalid_type_error: 'Please enter a valid email.',
     }).email(),
-    accType: z.enum(['zpv2', 'zmv2', "Both"], {
+    accType: z.enum(['zpv2', 'zmv2', "zplus"], {
         invalid_type_error: 'Please select an account type.',
     }),
     creditProductId: z.string({
@@ -74,7 +74,7 @@ const FormSchemaUpdate = z.object({
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true, email: true, accType: true });
-const CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true });
+const CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true, creditProductId: true });
 
 async function getUser(email: string): Promise<User | undefined> {
     try {
@@ -102,17 +102,17 @@ export async function createZipUser(prevState: State, formData: FormData) {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-        "product": "zpv2",
+        "product": formData.get("accType"),
         "env": "sandbox",
         "token": "AutomationTest"
     });
 
     if (formData.get("email") !== undefined && formData.get("email") !== "") {
         raw = JSON.stringify({
-            "product": "zpv2",
+            "product": formData.get("accType"),
             "env": "sandbox",
             "token": "AutomationTest",
-            "email": "\"" + formData.get("email") + "\""
+            "email":  formData.get("email")
         });
     }
 
@@ -144,6 +144,35 @@ export async function getVerificationCode(prevState: State, formData: FormData) 
         .catch((error) => { console.error(error); return error });
 
         const returnState: State = { message: null, errors: {}, isLoading: false, otp: verificationCodeResponse.otp};
+        return returnState;
+}
+
+export async function topUpBalance(prevState: State, formData: FormData) {
+    const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "amount": 20000,
+  "classification": "repayment",
+  "consumerId": "1714651",
+  "externalReference": "C-e368ccd1-97b3-40c8-afa6-41c33ebf3ac3",
+  "method": "immediate",
+  "type": "credit",
+  "accountId": "1407370"
+});
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: raw
+};
+
+const topUpResponse = await fetch("https://zip-services-accounts-api.internal.sand.au.edge.zip.co/accounts/accounts/1407370/Transactions", requestOptions)
+  .then((response) => response.text())
+  .then((result) => { console.log(result); return result })
+  .catch((error) => { console.error(error); return error });
+
+        const returnState: State = { message: "", errors: {}, isLoading: false };
         return returnState;
 }
 
@@ -434,10 +463,10 @@ export async function handleCheckoutResult(result: string, checkoutId: string) {
 
         if (checkout.state === 'approved') {
             const charge = await createCharge(checkoutId, checkout.order.amount, checkout.config.capture);
-            const newCustomerEmail = await createCustomer(undefined, charge);
-            console.log("pastCreateCustomer");
-            console.log(newCustomerEmail);
-            const newCustomer = await getCustomer(newCustomerEmail);
+            //const newCustomerEmail = await createCustomer(undefined, charge);
+            //console.log("pastCreateCustomer");
+            //console.log(newCustomerEmail);
+            const newCustomer = await getCustomer("testnewcreation@newtest.co");
             console.log(newCustomer);
             console.log(newCustomer?.id);
 
@@ -817,7 +846,9 @@ export async function createInvoice(checkout: any, charge: any, customer?: Custo
     // console.log("in createInvoice function");
     // Prepare data for insertion into the database
     // const { customerId, amount, status } = validatedFields.data;
-    const amountInCents = charge.amount * 100;
+    const amountInCents = parseInt(charge.amount * 100 + "");
+    const chargeCapturedAmountInCents = parseInt(charge.captured_amount * 100 + "");
+    console.log(amountInCents + " = " + chargeCapturedAmountInCents);
     var dateTime = new Date().toISOString().split('T');
     const date = dateTime[0] + " " + dateTime[1].split('Z')[0];
     // console.log(dateTime);
@@ -832,7 +863,7 @@ export async function createInvoice(checkout: any, charge: any, customer?: Custo
 
             await sql`
         INSERT INTO invoices (customer_id, amount, captured_amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
-        VALUES (${customer.id}, ${amountInCents}, ${charge.captured_amount * 100} ,${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
+        VALUES (${customer.id}, ${amountInCents}, ${chargeCapturedAmountInCents} ,${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
       `;
             
 
@@ -841,7 +872,7 @@ export async function createInvoice(checkout: any, charge: any, customer?: Custo
             console.log("customer is null");
             await sql`
             INSERT INTO invoices (customer_id, amount, captured_amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
-            VALUES ('d6e15727-9fe1-4961-8c5b-ea44a9bd81aa', ${amountInCents}, ${charge.captured_amount * 100} , ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
+            VALUES ('d6e15727-9fe1-4961-8c5b-ea44a9bd81aa', ${amountInCents}, ${chargeCapturedAmountInCents} , ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
           `;
         }
     } catch (error) {
@@ -926,7 +957,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
         };
     }
 
-    var amountToSet = amountInCents;
+    var amountToSet =  parseInt(amountInCents +"");
 
     if (status === 'refunded' && newAmount > 0) {
         status = 'partially refunded';
@@ -939,7 +970,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
 
 
     if (status === 'captured') {
-        const captureResponse = await captureCharge(invoice.charge_id, amountToSet/100);
+        const captureResponse = await captureCharge(invoice.charge_id,  parseInt(amountToSet/100 + ""));
         console.log("precapture")
         console.log(captureResponse);
 
@@ -981,7 +1012,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
             `;
         } catch (error) {
             return {
-                message: 'Database Error: Failed to Update Invoice.1',
+                message: 'Database Error: Failed to Update Invoice.',
             };
         }
     }

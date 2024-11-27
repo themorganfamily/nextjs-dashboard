@@ -133,7 +133,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="authorised"
+                  id="accTypeZP"
                   name="accType"
                   type="radio"
                   value="zpv2"
@@ -141,7 +141,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   aria-describedby="status-error"
                 />
                 <label
-                  htmlFor="authorised"
+                  htmlFor="accTypeZP"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   Zip Pay 
@@ -150,7 +150,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               </div>
               <div className="flex items-center">
                 <input
-                  id="captured"
+                  id="accTypeZM"
                   name="accType"
                   type="radio"
                   value="zmv2"
@@ -159,7 +159,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   defaultChecked
                 />
                 <label
-                  htmlFor="captured"
+                  htmlFor="accTypeZM"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
@@ -170,21 +170,21 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               </div>
               <div className="flex items-center">
                 <input
-                  id="both"
+                  id="accTypeZPlus"
                   name="accType"
                   type="radio"
-                  value="both"
+                  value="zplus"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
                   defaultChecked
                 />
                 <label
-                  htmlFor="both"
+                  htmlFor="accTypeZPlus"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Both 
+                  Zip Plus 
                   {/* <CheckIcon className="h-4 w-4" /> */}
                 </label>
               </div>
