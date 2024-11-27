@@ -104,3 +104,12 @@ input[type='number']::-webkit-outer-spin-button {
 .zip-dark-border {
   border-color: #411361;
 }
+
+/* body > nextjs-portal {
+  display: none !important;
+} */
+
+html {
+  box-sizing: border-box;
+  overflow: hidden;
+}

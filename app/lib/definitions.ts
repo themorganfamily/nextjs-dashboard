@@ -23,6 +23,11 @@ export type CreditProduct = {
   name: string;
 };
 
+export type PaymentFlow = {
+  id: string;
+  name: string;
+};
+
 export type Invoice = {
   id: string;
   customer_id: string;
@@ -92,5 +97,7 @@ export type InvoiceForm = {
   id: string;
   customer_id: string;
   amount: number;
+  captured_amount: number;
   status: 'authorised' | 'captured';
+  charge_id: string;
 };

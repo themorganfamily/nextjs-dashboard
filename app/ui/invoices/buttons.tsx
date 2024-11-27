@@ -1,6 +1,7 @@
 import { PencilIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { deleteInvoice } from '@/app/lib/actions';
+import { deleteInvoice, oldDeleteInvoice } from '@/app/lib/actions';
 import Modal from '@/app/ui/invoices/modal';
+import { lusitana } from '@/app/ui/fonts';
 
 
 import Link from 'next/link';
@@ -41,6 +42,36 @@ export function CreateCustomer() {
   );
 }
 
+export function CreateCustomerToolKit() {
+  return (
+    <p
+    className={`${lusitana.className}
+      truncate rounded-xl bg-white px-4 py-8 text-center text-2xl mt-1 h-30`}
+  >
+    
+  
+    <Link
+      href="/dashboard/customers/create"
+      className="flex items-center  px-4 text-2xl rounded-xl font-medium  transition-colors hover:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      <PlusCircleIcon className="h-6 md:mr-2" /><span className="hidden md:block md:mr-1">Create Customer</span>{' '}
+      {/* <PlusIcon className="h-5 md:ml-4" /> */}
+    </Link></p>
+  );
+}
+
+export function GetMFA() {
+  return (
+    <Link
+      href="/dashboard/MFA"
+      className="flex h-8 pb-1 items-center text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      <span className="hidden md:block pl-2 pt-1">Fetch Code</span>{' '}
+      {/* <PlusIcon className="h-5 md:ml-4" /> */}
+    </Link>
+  );
+}
+
 export function UpdateInvoice({ id }: { id: string }) {
   return (
     <Link
@@ -53,7 +84,7 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 export function DeleteInvoice({ id }: { id: string }) {
-  const deleteInvoiceWithId = deleteInvoice.bind(null, id);
+  const deleteInvoiceWithId = oldDeleteInvoice.bind(null, id);
 
   return (
     <div>

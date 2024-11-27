@@ -1,4 +1,4 @@
-import Form from '@/app/ui/invoices/create-form';
+import Form from '@/app/ui/MFA-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchCustomers } from '@/app/lib/data';
 import { handleCheckoutResult } from '@/app/lib/actions';
@@ -9,7 +9,7 @@ import { Metadata } from 'next';
 //import { redirect } from 'next/dist/server/api-utils';
 
 export const metadata: Metadata = {
-  title: 'Create Order',
+  title: 'Get MFA Verification Code',
 };
 
 export default async function Page(props: {
@@ -49,23 +49,23 @@ export default async function Page(props: {
   const customers = await fetchCustomers();
 
   const paymentFlows = [
-    // {
-    //   id: "2",
-    //   name: "Barcode"
-    // },
-    // {
-    //   id: "3",
-    //   name: "QR code"
-    // }
-    // ,
+    {
+      id: "2",
+      name: "Barcode"
+    },
+    {
+      id: "3",
+      name: "QR code"
+    }
+    ,
     {
       id: "13",
       name: "Web Checkout"
     },
-    // {
-    //   id: "7",
-    //   name: "Web login"
-    // }
+    {
+      id: "7",
+      name: "Web login"
+    }
   ]
 
 
@@ -110,10 +110,10 @@ export default async function Page(props: {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Orders', href: '/dashboard/invoices' },
+          { label: 'Tool Kit', href: '/dashboard' },
           {
-            label: 'Create Order',
-            href: '/dashboard/invoices/create',
+            label: 'Get Two-factor Verification Code',
+            href: '/dashboard/MFA',
             active: true,
           },
         ]}

@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import type { Customer, User } from '@/app/lib/definitions';
+import { fetchInvoiceById } from './data';
 // import axios from 'axios';
 // import { cookies } from "next/headers";
 // import { NextRequest, NextResponse } from 'next/server';
@@ -36,7 +37,28 @@ const FormSchema = z.object({
         invalid_type_error: 'Please select a customer.',
     }),
     amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
-    status: z.enum(['authorised', 'captured'], {
+    status: z.enum(['authorised', 'captured', 'cancelled', 'refunded','partially refunded','deleted'], {
+        invalid_type_error: 'Please select an order status.',
+    }),
+    date: z.string(),
+    email: z.string({
+        invalid_type_error: 'Please enter a valid email.',
+    }).email(),
+    accType: z.enum(['zpv2', 'zmv2', "Both"], {
+        invalid_type_error: 'Please select an account type.',
+    }),
+    creditProductId: z.string({
+        invalid_type_error: 'Please select a credit product.',
+    }),
+});
+
+const FormSchemaUpdate = z.object({
+    id: z.string(),
+    customerId: z.string({
+        invalid_type_error: 'Please select a customer.',
+    }),
+    amount: z.coerce.number().gte(0, { message: 'Refund amount must be less than or equal to the order captured amount.' }),
+    status: z.enum(['authorised', 'captured', 'cancelled', 'refunded','partially refunded','deleted'], {
         invalid_type_error: 'Please select an order status.',
     }),
     date: z.string(),
@@ -107,6 +129,24 @@ export async function createZipUser(prevState: State, formData: FormData) {
 
 }
 
+export async function getVerificationCode(prevState: State, formData: FormData) {
+    const myHeaders = new Headers();
+    myHeaders.append("X-Zip-API-Key", "pFuBQbqMThx0W8JqH4JC6MhPCm0OEsIy");
+
+    const requestOptions = {
+        method: "GET",
+        headers: myHeaders
+    };
+
+    const verificationCodeResponse =  await fetch("https://api.static.sand.au.edge.zip.co/v2/get-otp/61400000000", requestOptions)
+        .then((response) => response.json())
+        .then((result) => { console.log(result); return result })
+        .catch((error) => { console.error(error); return error });
+
+        const returnState: State = { message: null, errors: {}, isLoading: false, otp: verificationCodeResponse.otp};
+        return returnState;
+}
+
 export async function createCheckout(prevState: State, formData: FormData) {
     const user = await getUser("user@nextmail.com");
 
@@ -165,8 +205,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
             }
         },
         "config": {
-            // "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
-            "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
+            "redirect_uri": "http://localhost:3000/dashboard/invoices/create",
+            // "redirect_uri": "https://nextjs-dashboard-three-self-67.vercel.app/dashboard/invoices/create",
             "capture": capture,
             "credit_product_id": formData.get("creditProductId")
         },
@@ -707,16 +747,19 @@ export async function createInvoice(checkout: any, charge: any, customer?: Custo
         if (customer !== null && customer !== undefined) {
             console.log("customer not null");
             console.log(customer);
+
             await sql`
-        INSERT INTO invoices (customer_id, amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
-        VALUES (${customer.id}, ${amountInCents}, ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
+        INSERT INTO invoices (customer_id, amount, captured_amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
+        VALUES (${customer.id}, ${amountInCents}, ${charge.captured_amount * 100} ,${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
       `;
+            
+
         }
         else {
             console.log("customer is null");
             await sql`
-            INSERT INTO invoices (customer_id, amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
-            VALUES ('d6e15727-9fe1-4961-8c5b-ea44a9bd81aa', ${amountInCents}, ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
+            INSERT INTO invoices (customer_id, amount, captured_amount, status, date, checkout_id, charge_id, receipt_number, product, interest_free_months, reference)
+            VALUES ('d6e15727-9fe1-4961-8c5b-ea44a9bd81aa', ${amountInCents}, ${charge.captured_amount * 100} , ${charge.state}, ${date}, ${checkout.id}, ${charge.id}, ${charge.receipt_number}, ${charge.product}, ${charge.interest_free_months}, ${charge.reference})
           `;
         }
     } catch (error) {
@@ -771,7 +814,6 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
-        creditProductId: formData.get('creditProductId'),
     });
 
     if (!validatedFields.success) {
@@ -782,14 +824,31 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
         };
     }
 
-    const { customerId, amount, status } = validatedFields.data;
+    const invoice = await fetchInvoiceById (id);
+
+    var { customerId, amount, status, creditProductId } = validatedFields.data;
 
     const amountInCents = amount * 100;
+    const invoiceAmountInCents = invoice.amount * 100;
+
+    const newAmount = amountInCents - invoiceAmountInCents
+
+    if (newAmount < 0) {
+        return {
+            errors: {},
+            message: 'Invalid amount. Refunds must be less than or equal to the original order amount. (update)',
+            isLoading: false,
+        };
+    }
+
+    if (status === 'refunded' && newAmount > 0) {
+        status = 'partially refunded'
+    }
 
     try {
         await sql`
             UPDATE invoices
-            SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+            SET amount = ${newAmount}, status = ${status}
             WHERE id = ${id}
         `;
     } catch (error) {
@@ -802,12 +861,132 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     redirect('/dashboard/invoices');
 }
 
-export async function deleteInvoice(id: string) {
+export async function deleteInvoice(id: string, prevState: State, formData: FormData) {
+    // throw new Error('Failed to Delete Invoice');
+    const user = await getUser("user@nextmail.com");
+    const invoice = await fetchInvoiceById (id);
+    var amountInCents = 0, newAmount = 0;
+
+    const UpdateInvoice = FormSchemaUpdate.omit({ id: true, date: true, creditProductId: true, accType: true, email: true});
+    console.log(formData.get('status'))
+
+    var validatedFields = UpdateInvoice.safeParse({
+        customerId: formData.get('customerId'),
+        amount: formData.get('amount'),
+        status: formData.get('status'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Update Invoice.1',
+            isLoading: false,
+        };
+    }
+
+    var amount = validatedFields.data?.amount;
+    if(amount !== undefined && amount !== null){
+        amountInCents = amount * 100;
+        const invoiceAmountInCents = invoice.captured_amount * 100;
+
+        newAmount = invoiceAmountInCents - amountInCents;
+        console.log(invoiceAmountInCents + " - " + amountInCents);
+        console.log (newAmount);
+        validatedFields = UpdateInvoice.safeParse({
+            customerId: formData.get('customerId'),
+            amount: newAmount,
+            status: formData.get('status'),
+        });
+
+        if (!validatedFields.success) {
+            return {
+                errors: validatedFields.error.flatten().fieldErrors,
+                message: 'Failed to Update Order.',
+                isLoading: false,
+            };
+        }
+    }
+
+    
+
+    try {
+
+
+        console.log("inside delet try");
+        const myHeaders = new Headers();
+        if (user !== undefined) {
+            myHeaders.append("Authorization", "Bearer " + user.key);
+        }
+        else {
+            myHeaders.append("Authorization", "Bearer " + "IKGdNiDHGs9AMoI+VY4wSZ0235uC9c2cZYMX+SbVx9I=");
+        }
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Access-Control-Allow-Origin", "https://nextjs-dashboard-three-self-67.vercel.app/")
+        myHeaders.append("Cookie", "__cf_bm=2z0AA7JoIaDsVy22mw.c93_j.QOVV8GWoLLXfS.2caU-1732076480-1.0.1.1-FJnum73IjqqtV4iTvScyVHMBB9cQl9NrhvoLr5hf8Sd2ySGre14BRUWbJgOfzV3fngZqElLhsYGRCWDNRrUFAA");
+    
+        
+        const raw = JSON.stringify(
+            {
+                "charge_id": invoice.charge_id,
+                "reason": "Test Reason Code",
+                "amount": amountInCents / 100
+              }               
+        );
+
+        console.log(raw);
+    
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            cors: true
+        };
+    
+        const refundResponse = await fetch("https://api.sandbox.zipmoney.com.au/merchant/v1/refunds", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                return result;
+            })
+            .catch((error) => console.error(error));
+            // console.log(refundResponse);
+
+
+
+            if(newAmount !== 0){
+
+                await sql`
+                UPDATE invoices
+                SET captured_amount = ${newAmount}, status = 'partially refunded'
+                WHERE id = ${id}
+            `;
+            }
+            else {
+                // await sql`DELETE FROM invoices WHERE id = ${id}`;
+                await sql`
+                UPDATE invoices
+                SET captured_amount = ${newAmount}, status = 'refunded'
+                WHERE id = ${id}
+            `;
+            }
+
+        // revalidatePath('/dashboard/invoices');
+        // redirect('/dashboard/invoices');
+    } catch (error) {
+        return { message: 'Database Error: Failed to Delete Invoice.' };
+    }
+
+    revalidatePath('/dashboard/invoices');
+    redirect('/dashboard/invoices');
+}
+
+export async function oldDeleteInvoice(id: string) {
     // throw new Error('Failed to Delete Invoice');
 
     try {
         await sql`DELETE FROM invoices WHERE id = ${id}`;
         revalidatePath('/dashboard/invoices');
+        redirect('/dashboard/invoices');
     } catch (error) {
         return { message: 'Database Error: Failed to Delete Invoice.' };
     }
@@ -825,5 +1004,6 @@ export type State = {
     };
     message?: string | null;
     isLoading?: boolean | null;
+    otp?: string | null;
 };
 

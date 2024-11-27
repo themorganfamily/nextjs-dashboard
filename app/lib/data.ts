@@ -39,7 +39,7 @@ export async function fetchLatestInvoices() {
 
     const latestInvoices = data.rows.map((invoice) => ({
       ...invoice,
-      amount: formatCurrency(invoice.amount),
+      amount: formatCurrency(invoice.amount)
     }));
     return latestInvoices;
   } catch (error) {
@@ -56,7 +56,7 @@ export async function fetchCardData() {
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const invoiceStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'captured' THEN amount ELSE 0 END) AS "captured",
+         SUM(CASE WHEN status IN ('captured', 'partially refunded') THEN amount ELSE 0 END) AS "captured",
          SUM(CASE WHEN status = 'authorised' THEN amount ELSE 0 END) AS "authorised"
          FROM invoices`;
 
@@ -83,7 +83,7 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 14;
+const ITEMS_PER_PAGE = 20;
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
@@ -95,6 +95,7 @@ export async function fetchFilteredInvoices(
       SELECT
         invoices.id,
         invoices.amount,
+        invoices.captured_amount,
         invoices.date,
         invoices.status,
         invoices.reference,
@@ -110,6 +111,7 @@ export async function fetchFilteredInvoices(
         customers.name ILIKE ${`%${query}%`} OR
         customers.email ILIKE ${`%${query}%`} OR
         invoices.amount::text ILIKE ${`%${query}%`} OR
+        invoices.captured_amount::text ILIKE ${`%${query}%`} OR
         invoices.date::text ILIKE ${`%${query}%`} OR
         invoices.status ILIKE ${`%${query}%`} OR
         invoices.reference ILIKE ${`%${query}%`} OR
@@ -154,7 +156,9 @@ export async function fetchInvoiceById(id: string) {
         invoices.id,
         invoices.customer_id,
         invoices.amount,
-        invoices.status
+        invoices.status,
+        invoices.charge_id,
+        invoices.captured_amount
       FROM invoices
       WHERE invoices.id = ${id};
     `;
@@ -163,6 +167,7 @@ export async function fetchInvoiceById(id: string) {
       ...invoice,
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
+      captured_amount: invoice.captured_amount / 100,
     }));
 
     return invoice[0];

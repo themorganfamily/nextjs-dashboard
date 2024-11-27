@@ -6,8 +6,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 export default function Modal() {
   const [open, setOpen] = useState(false);
-  
-
+  //setOpen(true);
   return (
     <Dialog id="confimrationModal" open={open} onClose={setOpen} className="relative z-10">
       <DialogBackdrop
@@ -28,12 +27,11 @@ export default function Modal() {
                 </div>
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <DialogTitle as="h3" className="text-base font-semibold text-gray-900">
-                    Deactivate account
+                    Verification Code
                   </DialogTitle>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Are you sure you want to deactivate your account? All of your data will be permanently removed.
-                      This action cannot be undone.
+                      Test
                     </p>
                   </div>
                 </div>

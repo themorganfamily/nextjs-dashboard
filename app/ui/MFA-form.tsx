@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { SpinnerButton } from "../SpinnerButton"
+import { SpinnerButton } from "./SpinnerButton"
 import { CreditProduct, CustomerField, PaymentFlow } from '@/app/lib/definitions';
 import { useActionState } from 'react';
-import { State, redirectToZip } from '@/app/lib/actions';
+import { State, getVerificationCode } from '@/app/lib/actions';
+import { DevicePhoneMobileIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -14,6 +15,7 @@ import {
   SwatchIcon
 } from '@heroicons/react/24/outline';
 import { getParsedType } from "zod";
+import Modal from "./invoices/modal";
 
 
 
@@ -21,6 +23,9 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
   const [isLoading, setIsLoading] = useState<boolean>(false);
   var initialState: State = { message: null, errors: {}, isLoading: false };
   var clientSideValidation = false;
+  var verificationCode = "";
+
+ 
 
   // useEffect(() => {
   //   var amountInput = document.querySelector("amount");
@@ -42,7 +47,17 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
   const serverSubmit = async (prevState: State, formData: FormData) => {
     // disableLoading();
     setIsLoading(false);
-    const returnState: State = await redirectToZip(prevState, formData);
+    const returnState: State = await getVerificationCode(prevState, formData);
+    // if (verificationResponse.error !== undefined) {
+    //     console.log(verificationResponse.error);
+    //     verificationCode = verificationResponse.error;
+    //     return verificationResponse.error;
+    // }
+    // else if (verificationResponse.otp !== undefined) {
+    //     console.log(verificationResponse.otp);
+    //     verificationCode = verificationResponse.otp;
+    //     return verificationResponse.otp;
+    // }
     return returnState;
 
   }
@@ -90,7 +105,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
           </div>
         </div>
               {/* Payment flow */}
-        <div className="mb-4" >
+        <div className="mb-4" hidden>
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
             Choose a payment flow
           </label>
@@ -125,7 +140,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
         {/* Invoice Amount */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
+            Choose an AU mobile number
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -133,13 +148,13 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
                 id="amount"
                 name="amount"
                 type="number"
-                step="0.01"
-                placeholder="Enter AUD amount"
+                step="any"
+                placeholder="Enter customer mobile"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="amount-error"
                 defaultValue={amount}
               />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <DevicePhoneMobileIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
             <div id="amount-error" aria-live="polite" aria-atomic="true">
               {state.errors?.amount &&
@@ -153,7 +168,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
         </div>
 
           {/* Credit product Name */}
-          <div className="mb-4">
+          <div className="mb-4" hidden>
           <label htmlFor="creditProduct" className="mb-2 mt-4 block text-sm font-medium">
             Choose credit product
           </label>
@@ -189,7 +204,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
         {/* Invoice Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Set the order handling
+            Choose the relevant flow being tested
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
@@ -206,7 +221,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
                   htmlFor="authorised"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium bg-gray-100"
                 >
-                  Authorise only <ClockIcon className="h-4 w-4" />
+                  Payment flow <CurrencyDollarIcon className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">
@@ -223,7 +238,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
                   htmlFor="captured"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium bg-green-200"
                 >
-                  Capture <CheckIcon className="h-4 w-4" />
+                  Sign up flow <UserPlusIcon className="h-4 w-4" />
                 </label>
               </div>
             </div>
@@ -245,6 +260,11 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
               {state.message}
             </p>
           </div>
+          {state.otp && 
+          <>
+          <p className="pt-3">Your verification code:  {state.otp}</p>
+          {/* <Modal code="test" /> */}
+          </> }
         </fieldset>
       </div>
       <div className="mt-6 flex justify-end gap-4">
@@ -254,7 +274,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
         >
           Cancel
         </Link>
-        <SpinnerButton name="Create order" state={isLoading} onClick={clientSubmit} type="submit" children="" />
+        <SpinnerButton name="Get code" state={isLoading} onClick={clientSubmit} type="submit" children="" />
 
       </div>
 
