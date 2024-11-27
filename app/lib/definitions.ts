@@ -64,7 +64,7 @@ export type InvoicesTable = {
   image_url: string;
   date: string;
   amount: number;
-  status: 'authorised' | 'captured';
+  status: 'authorised' | 'captured' | 'refunded' | 'cancelled' | 'partially refunded';
   reference: string;
   receipt_number: string;
   product: string;
