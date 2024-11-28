@@ -122,7 +122,7 @@ export async function createZipUser(prevState: State, formData: FormData) {
         body: raw
     };
 
-    return fetch("https://zip-qa-createuser.internal.sand.au.edge.zip.co/createuser", requestOptions)
+    return fetch("https://7xkx0bgl.aue.devtunnels.ms:3001/createuser", requestOptions)
         .then((response) => response.json())
         .then((result) => { console.log(result); return result })
         .catch((error) => console.error(error));
