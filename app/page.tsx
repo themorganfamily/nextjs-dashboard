@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
 };
 
-export const maxDuration = 90;
+export const maxDuration = 60;
 
 export default function Page() {
   return (
