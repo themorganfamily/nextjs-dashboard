@@ -12,6 +12,8 @@ import { fetchInvoiceById } from './data';
 // import { cookies } from "next/headers";
 // import { NextRequest, NextResponse } from 'next/server';
 
+export const maxDuration = 60;
+
 export async function authenticate(
     prevState: string | undefined,
     formData: FormData,
