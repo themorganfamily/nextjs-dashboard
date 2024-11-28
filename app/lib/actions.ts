@@ -76,7 +76,7 @@ const FormSchemaUpdate = z.object({
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true, email: true, accType: true });
-const CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true, creditProductId: true });
+const CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true, creditProductId: true});
 
 async function getUser(email: string): Promise<User | undefined> {
     try {
@@ -98,6 +98,16 @@ async function getCustomer(email: string): Promise<Customer | undefined> {
     }
 }
 
+async function getCustomerbyConsumerId(id: string): Promise<Customer | undefined> {
+    try {
+        const customer = await sql<Customer>`SELECT * FROM customers WHERE consumer_id=${id}`;
+        return customer.rows[0];
+    } catch (error) {
+        console.error('Failed to fetch user:', error);
+        throw new Error('Failed to fetch customer.');
+    }
+}
+
 export async function createZipUser(prevState: State, formData: FormData) {
 
     const myHeaders = new Headers();
@@ -106,7 +116,8 @@ export async function createZipUser(prevState: State, formData: FormData) {
     var raw = JSON.stringify({
         "product": formData.get("accType"),
         "env": "sandbox",
-        "token": "AutomationTest"
+        "token": "AutomationTest",
+        "successCard": true
     });
 
     if (formData.get("email") !== undefined && formData.get("email") !== "") {
@@ -114,7 +125,8 @@ export async function createZipUser(prevState: State, formData: FormData) {
             "product": formData.get("accType"),
             "env": "sandbox",
             "token": "AutomationTest",
-            "email":  formData.get("email")
+            "email":  formData.get("email"),
+            "successCard": true
         });
     }
 
@@ -200,8 +212,8 @@ export async function createCheckout(prevState: State, formData: FormData) {
 
     const raw = JSON.stringify({
         "shopper": {
-            "first_name": "Test1",
-            "last_name": "Testington",
+            "first_name": "Test",
+            "last_name": "User",
             "email": "test.tester@testing.com",
             "billing_address": {
                 "first_name": "Test",
@@ -468,7 +480,14 @@ export async function handleCheckoutResult(result: string, checkoutId: string) {
             //const newCustomerEmail = await createCustomer(undefined, charge);
             //console.log("pastCreateCustomer");
             //console.log(newCustomerEmail);
-            const newCustomer = await getCustomer("testnewcreation@newtest.co");
+            var newCustomer = await getCustomerbyConsumerId(charge.customer.id); // FIX HERE
+
+            if (newCustomer === undefined) {
+                const newCustomerEmail = await createCustomer(undefined, undefined, charge);
+            //console.log("pastCreateCustomer");
+                newCustomer = await getCustomer(newCustomerEmail); // FIX HERE
+            }
+          
             console.log(newCustomer);
             console.log(newCustomer?.id);
 
@@ -599,7 +618,7 @@ export async function createUser(prevState: State, formData: FormData) {
         const zipUserResponse = await createZipUser(prevState, formData)
         if (zipUserResponse.email) {
             //await createInvoice(validatedFields.data.customerId, validatedFields.data.amount, validatedFields.data.status);
-            const customerResult = await createCustomer(zipUserResponse.email);
+            const customerResult = await createCustomer(zipUserResponse, formData);
             redirect('/dashboard/customers?email=' + zipUserResponse.email);
         }
         // console.log("tets");
@@ -782,7 +801,7 @@ export async function cancelCharge(chargeId: string) {
     console.log('hmm')
 }
 
-export async function createCustomer(email?: string, charge?: any) {
+export async function createCustomer(zipUser?: any, formData?: FormData, charge?: any) {
 
     // console.log("in createInvoice function");
     // Prepare data for insertion into the database
@@ -803,10 +822,10 @@ export async function createCustomer(email?: string, charge?: any) {
             //console.log(charge);
            // console.log(charge.customer.first_name);
             const name = charge.customer.first_name + ' ' + charge.customer.last_name;
-            console.log(name + ' ' + charge.customer.email);
+            console.log(name + ' ' + charge.customer.email + ' ' + charge.customer.id, charge.product);
             await sql`
-        INSERT INTO customers (name, email, image_url)
-        VALUES ( ${name}, ${charge.customer.email}, '/customers/evil-rabbit.png')
+        INSERT INTO customers (name, email, image_url, consumer_id, account_type)
+        VALUES ( ${name}, ${charge.customer.email}, '/customers/evil-rabbit.png', ${parseInt(charge.customer.id)}, ${charge.product})
       `;
             // console.log("Customer created");
             // console.log(data);
@@ -814,14 +833,24 @@ export async function createCustomer(email?: string, charge?: any) {
         }
         else {
             console.log('Charge does not exist');
-            console.log(email);
+            console.log(zipUser);
+            var accType = formData?.get('accType');
+            if (accType === "zpv2"){
+                accType = "zipPay";
+            }
+            else if (accType === "zmv2"){
+                accType = "zipMoney";
+            }
+            else if (accType === "zplus"){
+                accType = "zipPlus";
+            }
             await sql`
-            INSERT INTO customers (name, email, image_url)
-            VALUES ('Test User', ${email}, '/customers/evil-rabbit.png')
+            INSERT INTO customers (name, email, image_url, mobile, account_id, consumer_id, customer_id, account_type)
+            VALUES ('Test User', ${zipUser.email}, '/customers/evil-rabbit.png', ${zipUser.mobile}, ${zipUser.accountId}, ${zipUser.consumerId}, ${zipUser.customerId}, ${accType?.toString()})
           `;
             // console.log("Customer created");
             // console.log(data);
-             return email;
+             return zipUser.email;
 
         }
 

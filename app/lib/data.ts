@@ -184,7 +184,8 @@ export async function fetchCustomers() {
         id,
         name,
         email,
-        image_url
+        image_url,
+        account_type
       FROM customers
       ORDER BY name ASC
     `;
@@ -205,6 +206,7 @@ export async function fetchFilteredCustomers(query: string) {
 		  customers.name,
 		  customers.email,
 		  customers.image_url,
+      customers.account_type,
 		  COUNT(invoices.id) AS total_invoices,
 		  SUM(CASE WHEN invoices.status = 'authorised' THEN invoices.amount ELSE 0 END) AS total_authorised,
 		  SUM(CASE WHEN invoices.status = 'captured' THEN invoices.amount ELSE 0 END) AS total_captured

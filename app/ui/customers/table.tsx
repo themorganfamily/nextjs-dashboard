@@ -6,6 +6,8 @@ import {
   CustomersTableType,
   FormattedCustomersTable,
 } from '@/app/lib/definitions';
+import { TopUp, Unlock } from '@/app/ui/invoices/buttons';
+import InvoiceProduct from '@/app/ui/invoices/product';
 
 export default async function CustomersTable({
   customers,
@@ -59,6 +61,9 @@ export default async function CustomersTable({
                     <th scope="col" className="px-3 py-5 font-medium">
                       Account Type
                     </th>
+                    <th scope="col" className="relative py-3 pl-6 pr-3">
+                    <span className="sr-only">Edit</span>
+                  </th>
                   </tr>
                 </thead>
 
@@ -81,8 +86,24 @@ export default async function CustomersTable({
                         {customer.email}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.accountType}
+                      <InvoiceProduct product={customer.account_type} />
                       </td>
+                      <td className="whitespace-nowrap bg-white py-3 pl-6 pr-3">
+                      <div className="flex justify-end gap-3">
+                        {/* {(invoice.status !== 'refunded' && invoice.status !== 'cancelled') ?
+                          <> */}
+                           
+                          {/* </>
+                          :
+                          <>
+                            <DeleteInvoice id={invoice.id} />
+                          </>} */}
+
+<TopUp id={customer.id} />
+<Unlock id={customer.id} />
+
+                      </div>
+                    </td>
                     </tr>
                   ))}
                 </tbody>

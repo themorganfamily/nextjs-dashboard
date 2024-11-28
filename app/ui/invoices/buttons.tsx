@@ -98,3 +98,35 @@ export function DeleteInvoice({ id }: { id: string }) {
     </div>
   );
 }
+
+export function TopUp({ id }: { id: string }) {
+  const deleteInvoiceWithId = oldDeleteInvoice.bind(null, id);
+
+  return (
+    <div>
+      {/* <Modal /> */}
+      <form action={deleteInvoiceWithId}>
+        <button className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Delete</span>
+          <TrashIcon className="w-5" />
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export function Unlock({ id }: { id: string }) {
+  const deleteInvoiceWithId = oldDeleteInvoice.bind(null, id);
+
+  return (
+    <div>
+      {/* <Modal /> */}
+      <form action={deleteInvoiceWithId}>
+        <button className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Delete</span>
+          <TrashIcon className="w-5" />
+        </button>
+      </form>
+    </div>
+  );
+}

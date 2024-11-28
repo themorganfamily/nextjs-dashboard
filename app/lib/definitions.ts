@@ -16,6 +16,7 @@ export type Customer = {
   name: string;
   email: string;
   image_url: string;
+  account_type: string
 };
 
 export type CreditProduct = {
@@ -76,6 +77,7 @@ export type CustomersTableType = {
   name: string;
   email: string;
   image_url: string;
+  account_type: string;
   total_invoices: number;
   total_authorised: number;
   total_captured: number;
@@ -86,6 +88,7 @@ export type FormattedCustomersTable = {
   name: string;
   email: string;
   image_url: string;
+  account_type: string;
 };
 
 export type CustomerField = {
