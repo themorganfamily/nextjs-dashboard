@@ -110,7 +110,7 @@ export default async function CardWrapper() {
           href="/dashboard/invoices/create"
           className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-200 hover:bg-slate-300 hover:shadow-black-100 hover:shadow-md h-40"
         >
-          Test payment flows <MapIcon className="h-7 md:mr-2 ml-4 justify-end" />
+          Demo payment flows <MapIcon className="h-7 md:mr-2 ml-4 justify-end" />
         </Link>
          
         {/* </div> */}
