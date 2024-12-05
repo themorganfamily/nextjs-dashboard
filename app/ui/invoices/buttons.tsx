@@ -1,5 +1,5 @@
-import { PencilIcon, PlusCircleIcon, TrashIcon, LockOpenIcon, BanknotesIcon } from '@heroicons/react/24/outline';
-import { deleteInvoice, oldDeleteInvoice, deleteCustomer, topUpBalance} from '@/app/lib/actions';
+import { PencilIcon, PlusCircleIcon, TrashIcon, LockOpenIcon, BanknotesIcon, MapIcon } from '@heroicons/react/24/outline';
+import { deleteInvoice, oldDeleteInvoice, deleteCustomer, topUpBalance, selectPaymentFlow} from '@/app/lib/actions';
 import Modal from '@/app/ui/invoices/modal';
 import { lusitana } from '@/app/ui/fonts';
 
@@ -113,6 +113,48 @@ export function TopUp({ id }: { id: string }) {
         </button>
       </form>
     </div>
+  );
+}
+
+export function PaymentFlowButton({ paymentFlows }: { paymentFlows:any }) {
+  const selectPaymentFlowId = selectPaymentFlow.bind(null, paymentFlows);
+  console.log("in payment flow select");
+  return (
+    <>
+      <form action={selectPaymentFlowId}>
+      <input type="submit" formAction={selectPaymentFlowId}>
+        <div className="mb-4" >
+          <label htmlFor="paymentFlow" className="mb-2 block text-sm font-medium">
+            Choose a payment flow
+          </label>
+          <div className="relative">
+            <select
+              id="paymentFlow"
+              name="paymentFlow"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue=""
+              aria-describedby="paymentFlow-error"
+            // onChange={choosePaymentFlow}
+            >
+              <option value="" disabled>
+                Select a payment flow
+              </option>
+              {paymentFlows.map((paymentFlow: any) => (
+                <option key={paymentFlow.id} value={paymentFlow.id}>
+                  {paymentFlow.name}
+                </option>
+              ))}
+
+            </select>
+            <MapIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+        </div>
+        </input>
+      </form>
+
+
+     
+    </>
   );
 }
 

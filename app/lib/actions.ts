@@ -172,6 +172,10 @@ export async function getVerificationCode(prevState: State, formData: FormData) 
     return returnState;
 }
 
+export async function selectPaymentFlow(id:string) {
+    console.log("in select payment flow");
+}
+
 export async function topUpBalance(id:string) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");

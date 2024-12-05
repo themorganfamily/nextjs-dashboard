@@ -16,6 +16,7 @@ import {
   BookmarkIcon
 } from '@heroicons/react/24/outline';
 import { getParsedType } from "zod";
+import { PaymentFlowButton } from '@/app/ui/invoices/buttons'
 
 
 
@@ -42,12 +43,12 @@ export default function Form({
 
     // showForm(false);
   
-
+   
   function choosePaymentFlow(num: string) {
     //console.log(id);
     //const selectOption = event?.target;
     // console.log(selectOption.);
-
+    console.log(num);
     if (num !== null && num !== undefined && num !== "") {
       showForm(true)
     }
@@ -111,6 +112,8 @@ export default function Form({
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
 
         {/* Payment flow */}
+
+      {/* <PaymentFlowButton paymentFlows={paymentFlows} /> */}
        
         <div className="mb-4" >
           <label htmlFor="paymentFlow" className="mb-2 block text-sm font-medium">
@@ -123,13 +126,26 @@ export default function Form({
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue=""
               aria-describedby="paymentFlow-error"
-            // onChange={choosePaymentFlow}
+              onChange={(event) => {               
+                if (event.currentTarget.value !== undefined && event.currentTarget.value !== null && event.currentTarget.value !== "") {
+                  if (event.currentTarget.value === "1") {
+                    choosePaymentFlow("1")
+                  }
+                  else if (event.currentTarget.value === "2") {
+                    choosePaymentFlow("2")
+                  }
+                  else if (event.currentTarget.value === "3") {
+                    console.log(event.currentTarget.value);
+                    choosePaymentFlow("3")
+                  }
+                }
+              }}
             >
               <option value="" disabled>
                 Select a payment flow
               </option>
               {paymentFlows.map((paymentFlow: any) => (
-                <option key={paymentFlow.id} value={paymentFlow.id} onClick={(flow) => choosePaymentFlow(paymentFlow.id)}>
+                <option key={paymentFlow.id} value={paymentFlow.id} >
                   {paymentFlow.name}
                 </option>
               ))}
