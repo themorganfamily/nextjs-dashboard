@@ -63,9 +63,10 @@ export default async function CardWrapper() {
         {/* <div className="pr-2 rounded-md bg-gray-100"> */}
         <Link
           href="/dashboard/customers/create"
-          className=" rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50 hover:bg-gray-100 hover:shadow-black-100 hover:shadow-md h-40"
+          // className=" rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50 hover:bg-gray-100 hover:shadow-black-100 hover:shadow-md h-40"
+          className=" rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50 hover:shadow-black-100 hover:shadow-md h-40"
         >
-          Create customer <UserPlusIcon className="h-7 md:mr-2 ml-4 justify-end" />
+          <strong className='pr-1'>Create</strong> customer <UserPlusIcon className="h-7 md:mr-2 ml-4 justify-end" />
         </Link>
          
         {/* </div> */}
@@ -79,9 +80,11 @@ export default async function CardWrapper() {
         {/* <div className="pr-2 rounded-md bg-gray-100"> */}
         <Link
           href="/dashboard/customers/create"
-          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-50 hover:bg-slate-100 hover:shadow-black-100 hover:shadow-md h-40"
-        >
-          Top up balance <CurrencyDollarIcon className="h-7 md:mr-2 ml-4 justify-end" />
+          // className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-50 hover:bg-slate-100 hover:shadow-black-100 hover:shadow-md h-40"
+          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50  hover:shadow-black-100 hover:shadow-md h-40"
+
+       >
+          <strong className='pr-1'>Top up</strong> balance <CurrencyDollarIcon className="h-7 md:mr-2 ml-4 justify-end" />
         </Link>
          
         {/* </div> */}
@@ -94,9 +97,11 @@ export default async function CardWrapper() {
         {/* <div className="pr-2 rounded-md bg-gray-100"> */}
         <Link
           href="/dashboard/customers/create"
-          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-100 hover:bg-slate-200 hover:shadow-black-100 hover:shadow-md h-40"
-        >
-          Unlock customer <LockOpenIcon className="h-7 md:mr-2 ml-4 justify-end" />
+          // className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-100 hover:bg-slate-200 hover:shadow-black-100 hover:shadow-md h-40"
+          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50  hover:shadow-black-100 hover:shadow-md h-40"
+
+       >
+          <strong className='pr-1'>Unlock</strong>  customer <LockOpenIcon className="h-7 md:mr-2 ml-4 justify-end" />
         </Link>
          
         {/* </div> */}
@@ -108,9 +113,11 @@ export default async function CardWrapper() {
         {/* <div className="pr-2 rounded-md bg-gray-100"> */}
         <Link
           href="/dashboard/invoices/create"
-          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-200 hover:bg-slate-300 hover:shadow-black-100 hover:shadow-md h-40"
+          // className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-200 hover:bg-slate-300 hover:shadow-black-100 hover:shadow-md h-40"
+          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50  hover:shadow-black-100 hover:shadow-md h-40"
+
         >
-          Demo payment flows <MapIcon className="h-7 md:mr-2 ml-4 justify-end" />
+          <strong className='pr-1'>Demo </strong>payment flows <MapIcon className="h-7 md:mr-2 ml-4 justify-end" />
         </Link>
          
         {/* </div> */}

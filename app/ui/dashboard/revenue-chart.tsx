@@ -12,7 +12,7 @@ import { fetchRevenue } from '@/app/lib/data';
 
 export default async function RevenueChart() { // Make component async, remove the props
   const revenue = await fetchRevenue(); // Fetch data inside the component
-  const chartHeight = 350;
+  const chartHeight = 330;
   // NOTE: Uncomment this code in Chapter 7
 
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
@@ -24,7 +24,7 @@ export default async function RevenueChart() { // Make component async, remove t
   return (
     <div className="w-full md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Order frequency
+        Customers created
       </h2>
       {/* NOTE: Uncomment this code in Chapter 7 */}
 
@@ -42,7 +42,7 @@ export default async function RevenueChart() { // Make component async, remove t
           {revenue.map((month) => (
             <div key={month.month} className="flex flex-col items-center gap-2">
               <div
-                className="w-full rounded-md bg-slate-400"
+                className="w-full rounded-md zip-light-bg"
                 // bg-blue-300
                 style={{
                   height: `${(chartHeight / topLabel) * month.revenue}px`,
