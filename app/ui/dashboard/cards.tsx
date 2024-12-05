@@ -6,10 +6,15 @@ import {
   InboxIcon,
   DevicePhoneMobileIcon,
   UserPlusIcon,
-  CurrencyDollarIcon
+  CurrencyDollarIcon,
+  PlusCircleIcon,
+  MapIcon,
+  LockOpenIcon
 } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
 import { CreateCheckout, CreateCustomer, CreateCustomerToolKit, GetMFA } from '../invoices/buttons';
+import Link from 'next/link';
+import { ArrowRightIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 
 const iconMap = {
   collected: BanknotesIcon,
@@ -30,64 +35,91 @@ export default async function CardWrapper() {
   const orderSummary = totalCapturedInvoices
   return (
     <>
-    <div
-      className={`relative overflow-hidden rounded-xl bg-gray-50 p-2 shadow-sm`}
+    {/* <div
+      className={`relative overflow-hidden rounded-xl bg-gray-50 p-1 shadow-sm hover:bg-gray-100 hover:text-gray-600`}
     >
-      <div className="flex p-4">
-        {/* <div className="h-5 w-5 rounded-md bg-gray-100" /> */}
-        <DevicePhoneMobileIcon className="h-5 w-5 text-gray-700" />
-        {/* <div className="ml-2 h-6 w-16 rounded-md bg-gray-200 text-sm font-medium" /> */}
-        <h3 className="ml-2 text-sm font-medium">Two-factor Authentication</h3>
-      </div>
-      <div className="flex items-center justify-center truncate rounded-xl bg-white px-4 py-8">
-        <div className="h-8 pr-2 rounded-md bg-gray-100">
-          <GetMFA/>
-        </div>
-        {/* <GetMFA/> */}
-      </div>
-    </div>
-    
-    <div
-      className={`relative overflow-hidden rounded-xl bg-gray-50 p-2 shadow-sm`}
-    >
-      <div className="flex p-4">
-        {/* <div className="h-5 w-5 rounded-md bg-gray-50" /> */}
-        <UserPlusIcon className="h-5 w-5 text-gray-700" />
-        {/* <div className="ml-2 h-6 w-16 rounded-md bg-gray-200 text-sm font-medium" /> */}
-        <h3 className="ml-2 text-sm font-medium">Create Test Customers</h3>
-      </div>
-      <div className="flex items-center justify-center truncate rounded-xl bg-white px-4 py-8">
-        <div className="h-7 w-20 rounded-md bg-gray-100" />
-        {/* <CreateCustomer/> */}
-      </div>
-    </div>
-    
-      {/* <GetMFA/> */}
-      {/* <Card title="Create Test Customer" value={totalCapturedInvoices} type="collected" /> */}
-      {/* <Card title="Get MFA Verification Code" value={totalAuthorisedInvoices} type="pending" /> */}
-      
-      <div
-      className={`relative overflow-hidden rounded-xl bg-gray-50 p-2 shadow-sm`}
-    >
-      <div className="flex p-4">
-      <CurrencyDollarIcon className="h-5 w-5 text-gray-700" />
 
-        {/* <div className="h-5 w-5 rounded-md bg-gray-100" /> */}
-        {/* <div className="ml-2 h-6 w-16 rounded-md bg-gray-200 text-sm font-medium" /> */}
-        <h3 className="ml-2 text-sm font-medium">Test Payment Flows</h3>
-      </div>
-      <div className="flex items-center justify-center truncate rounded-xl bg-white px-4 py-8">
-        <div className="h-7 w-20 rounded-md bg-gray-100" />
-        {/* <CreateCheckout/> */}
-      </div>
+    
     </div>
+
+    <div
+      className={`relative overflow-hidden rounded-xl bg-gray-50 p-1 shadow-sm hover:bg-gray-100 hover:text-gray-600`}
+    >
+
+    
+    </div>
+
+    <div
+      className={`relative overflow-hidden rounded-xl bg-gray-50 p-1 shadow-sm hover:bg-gray-100 hover:text-gray-600`}
+    >
+
      
-      {/* <Card
-        title="Create Order"
-        value={function () {return <CreateCheckout/>}}
-        type="customers"
-      /> */}
-      <Card title={orderSummaryTitle} value={orderSummary} type="invoices" />
+    </div> */}
+    {/* <div
+      className={`relative overflow-hidden rounded-xl bg-gray-50 p-3 shadow-sm hover:bg-gray-50 hover:text-gray-800`}
+    > */}
+
+      {/* <div className="flex items-center justify-center truncate rounded-xl bg-white h-80"> */}
+        {/* <div className="pr-2 rounded-md bg-gray-100"> */}
+        <Link
+          href="/dashboard/customers/create"
+          className=" rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl  bg-gray-50 hover:shadow-xl hover:shadow-gray-100 h-40"
+        >
+          Create customer <UserPlusIcon className="h-7 md:mr-2 ml-4 justify-end" />
+        </Link>
+         
+        {/* </div> */}
+      {/* </div> */}
+{/*     
+    <div
+      className={`relative overflow-hidden rounded-xl bg-gray-50 p-3 shadow-sm hover:bg-gray-50 hover:text-gray-800`}
+    > */}
+
+      {/* <div className="flex items-center justify-center truncate rounded-xl bg-white h-80"> */}
+        {/* <div className="pr-2 rounded-md bg-gray-100"> */}
+        <Link
+          href="/dashboard/customers/create"
+          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-100 hover:shadow-xl hover:shadow-gray-100 h-40"
+        >
+          Top up balance <CurrencyDollarIcon className="h-7 md:mr-2 ml-4 justify-end" />
+        </Link>
+         
+        {/* </div> */}
+      {/* </div> */}
+    {/* </div> */}
+    
+
+
+      {/* <div className="flex items-center justify-center truncate rounded-xl bg-white h-80"> */}
+        {/* <div className="pr-2 rounded-md bg-gray-100"> */}
+        <Link
+          href="/dashboard/customers/create"
+          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl  bg-slate-300 hover:shadow-xl hover:shadow-gray-200 h-40"
+        >
+          Unlock account <LockOpenIcon className="h-7 md:mr-2 ml-4 justify-end" />
+        </Link>
+         
+        {/* </div> */}
+      {/* </div> */}
+   
+ 
+
+      {/* <div className="flex items-center justify-center truncate rounded-xl bg-white h-80"> */}
+        {/* <div className="pr-2 rounded-md bg-gray-100"> */}
+        <Link
+          href="/dashboard/invoices/create"
+          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-600 text-white hover:shadow-xl hover:shadow-gray-400 h-40"
+        >
+          Test payment flows <MapIcon className="h-7 md:mr-2 ml-4 justify-end" />
+        </Link>
+         
+        {/* </div> */}
+      {/* </div> */}
+   
+
+
+    {/* <Card title={orderSummaryTitle} value={orderSummary} type="invoices" /> */}
+      {/* <GetMFA/> */}
       
     </>
   );

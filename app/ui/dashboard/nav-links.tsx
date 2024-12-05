@@ -5,7 +5,9 @@ import {
   HomeIcon,
   DocumentDuplicateIcon,
   WrenchIcon,
-  CurrencyDollarIcon
+  CurrencyDollarIcon,
+  CodeBracketIcon,
+  MapIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -15,13 +17,14 @@ import clsx from 'clsx';
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: 'Tool Kit', href: '/dashboard', icon: WrenchIcon },
-  { name: 'Hosted Assets', href: '/assets', icon: HomeIcon },
+  { name: 'Hosted Assets', href: '/assets', icon: CodeBracketIcon },
   {
-    name: 'Orders',
-    href: '/dashboard/invoices',
-    icon: CurrencyDollarIcon,
+    name: 'Payment Flows',
+    href: '/dashboard/invoices/create',
+    icon: MapIcon,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'Test Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'Order Management', href: '/dashboard/invoices', icon: CurrencyDollarIcon },
 ];
 
 export default function NavLinks() {

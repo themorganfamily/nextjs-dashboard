@@ -16,7 +16,11 @@ export type Customer = {
   name: string;
   email: string;
   image_url: string;
-  account_type: string
+  account_type: string;
+  tokenised: boolean;
+  consumer_id: string;
+  account_id: string;
+  customer_id: string;
 };
 
 export type CreditProduct = {
@@ -52,6 +56,15 @@ export type LatestInvoice = {
   amount: string;
 };
 
+export type LatestCustomer = {
+  id: string;
+  name: string;
+  image_url: string;
+  email: string;
+  account_type: string;
+  date: string;
+};
+
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
   amount: number;
@@ -81,6 +94,8 @@ export type CustomersTableType = {
   total_invoices: number;
   total_authorised: number;
   total_captured: number;
+  tokenised: boolean;
+  consumer_id: string;
 };
 
 export type FormattedCustomersTable = {
@@ -89,11 +104,14 @@ export type FormattedCustomersTable = {
   email: string;
   image_url: string;
   account_type: string;
+  tokenised: boolean;
 };
 
 export type CustomerField = {
   id: string;
   name: string;
+  email: string;
+  account_type: string;
 };
 
 export type InvoiceForm = {

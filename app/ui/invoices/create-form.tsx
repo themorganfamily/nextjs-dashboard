@@ -11,14 +11,24 @@ import {
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
-  SwatchIcon
+  SwatchIcon,
+  MapIcon,
+  BookmarkIcon
 } from '@heroicons/react/24/outline';
 import { getParsedType } from "zod";
 
 
 
-export default function Form({ customers, amount, creditProducts, paymentFlows }: { customers: CustomerField[], amount: number | undefined, creditProducts: CreditProduct[], paymentFlows: PaymentFlow[]}) {
+export default function Form({
+  customers,
+  amount,
+  creditProducts,
+  paymentFlows }: { customers: CustomerField[], amount: number | undefined, creditProducts: CreditProduct[], paymentFlows: PaymentFlow[] }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [tokenFlow, showCustomers] = useState<boolean>(false);
+  const [termFlow, showTerms] = useState<boolean>(false);
+  const [flowNotNull, showForm] = useState<boolean>(false);
+
   var initialState: State = { message: null, errors: {}, isLoading: false };
   var clientSideValidation = false;
 
@@ -28,6 +38,43 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
   //     console.log("why");
   //   })
   // }, []);
+
+
+    // showForm(false);
+  
+
+  function choosePaymentFlow(num: string) {
+    //console.log(id);
+    //const selectOption = event?.target;
+    // console.log(selectOption.);
+
+    if (num !== null && num !== undefined && num !== "") {
+      showForm(true)
+    }
+    
+
+    if (num === '2') {
+      showCustomers(true);
+    }
+    else {
+      showCustomers(false);
+    }
+
+    if (num === '3') {
+      showTerms(true);
+    }
+    else {
+      showTerms(false);
+    }
+
+  }
+  var choosePaymentFlowBind;
+
+
+  // var test = document.getElementById("paymentFlow");
+  // test?.addEventListener("change", (e) => {
+  //   console.log('test'); // logs `false`
+  // });
 
   const clientSubmit = async () => {
 
@@ -52,66 +99,43 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
   if (state.message !== null) {
     amount = undefined;
   }
+  
+  // if (amount !== undefined){
+  //   showForm(true)
+  // }
+
+
 
   return (
     <form action={formAction} aria-describedby="form-error">
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Customer Name */}
-        <div className="mb-4" hidden>
-          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
-          </label>
-          <div className="relative">
-            <select
-              id="customer"
-              name="customerId"
-              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue=""
-              aria-describedby="customer-error"
-            >
-              <option value="" disabled>
-                Select a customer
-              </option>
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.name}
-                </option>
-              ))}
-            </select>
-            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-          </div>
-          <div id="customer-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.customerId &&
-              state.errors.customerId.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
-        </div>
-              {/* Payment flow */}
+
+        {/* Payment flow */}
+       
         <div className="mb-4" >
-          <label htmlFor="customer" className="mb-2 block text-sm font-medium">
+          <label htmlFor="paymentFlow" className="mb-2 block text-sm font-medium">
             Choose a payment flow
           </label>
           <div className="relative">
             <select
-              id="customer"
-              name="customerId"
+              id="paymentFlow"
+              name="paymentFlow"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue=""
-              aria-describedby="customer-error"
+              aria-describedby="paymentFlow-error"
+            // onChange={choosePaymentFlow}
             >
               <option value="" disabled>
                 Select a payment flow
               </option>
               {paymentFlows.map((paymentFlow: any) => (
-                <option key={paymentFlow.id} value={paymentFlow.id}>
+                <option key={paymentFlow.id} value={paymentFlow.id} onClick={(flow) => choosePaymentFlow(paymentFlow.id)}>
                   {paymentFlow.name}
                 </option>
               ))}
+
             </select>
-            <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <MapIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
           <div id="customer-error" aria-live="polite" aria-atomic="true">
             {state.errors?.customerId &&
@@ -122,7 +146,11 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
               ))}
           </div>
         </div>
+     
+     {/* FORM HIDDEN UNTIL FLOW SELECTED */}
         {/* Invoice Amount */}
+        {flowNotNull ? 
+        <>
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
             Choose an amount
@@ -150,41 +178,46 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
                 ))}
             </div>
           </div>
-        </div>
+        </div> 
+        
 
-          {/* Credit product Name */}
+        {/* Credit product Name */}
+        
+        {termFlow ? 
           <div className="mb-4">
-          <label htmlFor="creditProduct" className="mb-2 mt-4 block text-sm font-medium">
-            Choose credit product
-          </label>
-          <div className="relative">
-            <select
-              id="creditProduct"
-              name="creditProductId"
-              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue=""
-              aria-describedby="creditProduct-error"
-            >
-              <option value="" disabled>
-                Select a credit product
-              </option>
-              {creditProducts.map((creditProduct) => (
-                <option key={creditProduct.id} value={creditProduct.id}>
-                  {creditProduct.name}
+            <label htmlFor="creditProduct" className="mb-2 mt-4 block text-sm font-medium">
+              Choose credit product
+            </label>
+            <div className="relative">
+              <select
+                id="creditProduct"
+                name="creditProductId"
+                className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                defaultValue=""
+                aria-describedby="creditProduct-error"
+              >
+                <option value="" disabled>
+                  Select a credit product
                 </option>
-              ))}
-            </select>
-            <SwatchIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+                {creditProducts.map((creditProduct) => (
+                  <option key={creditProduct.id} value={creditProduct.id}>
+                    {creditProduct.name}
+                  </option>
+                ))}
+              </select>
+              <SwatchIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            </div>
+            <div id="creditProduct-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.creditProductId &&
+                state.errors.creditProductId.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
           </div>
-          <div id="creditProduct-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.creditProductId &&
-              state.errors.creditProductId.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
-        </div>
+          : null
+        }
 
         {/* Invoice Status */}
         <fieldset>
@@ -238,7 +271,7 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
               ))}
           </div>
 
-             
+
 
           <div id="form-error" aria-live="polite" aria-atomic="true">
             <p className="mt-2 text-sm text-red-500">
@@ -246,6 +279,65 @@ export default function Form({ customers, amount, creditProducts, paymentFlows }
             </p>
           </div>
         </fieldset>
+        <div>
+          {/* tokeniseation checkbox */}
+          {tokenFlow ? null :
+            <><label htmlFor="tokenise" className="mb-2 block text-sm font-medium mt-2">Tokenise customer account?</label>
+              <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
+                <div className="flex gap-4">
+                  <div className="flex items-center">
+                    <input type="checkbox" id="tokenise" name="tokenise" className="appearance-none w-4 h-4 rounded-sm bg-white" />
+                    <label
+                  htmlFor="tokenise"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full pl-1 pr-3 py-1.5 text-xs font-medium bg-white"
+                >
+                  Save account details 
+                </label>
+                  </div>
+                </div>
+              </div>
+            </>
+          }
+
+          {/* Customer Name */}
+          {tokenFlow ?
+            <div className="mb-1 mt-2">
+              <label htmlFor="customer" className="mb-2 block text-sm font-medium">
+                Choose customer
+              </label>
+              <div className="relative">
+                <select
+                  id="customer"
+                  name="customer"
+                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  defaultValue=""
+                  aria-describedby="customer-error"
+                >
+                  <option value="" disabled>
+                    Select a customer
+                  </option>
+                  {customers.map((customer) => (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.email} ({customer.account_type})
+                    </option>
+                  ))}
+                </select>
+                <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              </div>
+              <div id="customer-error" aria-live="polite" aria-atomic="true">
+                {state.errors?.customerId &&
+                  state.errors.customerId.map((error: string) => (
+                    <p className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ))}
+              </div>
+            </div> : null
+          }
+
+        </div>
+        </>
+        : null}
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link

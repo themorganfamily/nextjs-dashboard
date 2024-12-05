@@ -232,7 +232,7 @@ export default function EditInvoiceForm({
           Cancel
         </Link>
         {/* <Button type="submit">Edit Invoice</Button> */}
-        <SpinnerButton name="Edit Invoice" state={isLoading} onClick={clientSubmit} type="submit" children="" />
+        <SpinnerButton name="Edit order" state={isLoading} onClick={clientSubmit} type="submit" children="" />
 
       </div>
     </form>

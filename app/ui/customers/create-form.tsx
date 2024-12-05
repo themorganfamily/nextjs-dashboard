@@ -106,7 +106,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="Optional"
+                placeholder="Enter a valid email"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
                 // defaultValue={email}
@@ -139,6 +139,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   value="zpv2"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
+                  defaultChecked
                 />
                 <label
                   htmlFor="accTypeZP"
@@ -156,7 +157,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   value="zmv2"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
-                  defaultChecked
+                  
                 />
                 <label
                   htmlFor="accTypeZM"
@@ -176,7 +177,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   value="zplus"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
-                  defaultChecked
+                  
                 />
                 <label
                   htmlFor="accTypeZPlus"
@@ -208,7 +209,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/invoices"
+          href="/dashboard/customers"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel

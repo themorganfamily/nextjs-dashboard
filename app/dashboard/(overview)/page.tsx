@@ -30,6 +30,7 @@ export default async function Page() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
           <CardWrapper />
+          {/* <CardsSkeleton /> */}
         </Suspense>
         {/* <Card title="Collected" value={totalCapturedInvoices} type="collected" />
         <Card title="Pending" value={totalAuthorisedInvoices} type="pending" />
@@ -43,9 +44,11 @@ export default async function Page() {
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <Suspense fallback={<RevenueChartSkeleton />}>
           <RevenueChart />
+          {/* <RevenueChartSkeleton /> */}
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
           <LatestInvoices />
+          {/* <LatestInvoicesSkeleton /> */}
         </Suspense>
       </div>
     </main>

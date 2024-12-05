@@ -1,6 +1,6 @@
 import Form from '@/app/ui/invoices/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchCustomers } from '@/app/lib/data';
+import { fetchTokenisedCustomers } from '@/app/lib/data';
 import { handleCheckoutResult } from '@/app/lib/actions';
 // import { useRouter } from 'next/router';
 
@@ -46,7 +46,7 @@ export default async function Page(props: {
   }
 
 
-  const customers = await fetchCustomers();
+  const customers = await fetchTokenisedCustomers();
 
   const paymentFlows = [
     // {
@@ -59,8 +59,16 @@ export default async function Page(props: {
     // }
     // ,
     {
-      id: "13",
+      id: "1",
       name: "Web Checkout"
+    },
+    {
+      id: "3",
+      name: "Web Checkout (Term selection)"
+    },
+    {
+      id: "2",
+      name: "Tokenised Payment"
     },
     // {
     //   id: "7",

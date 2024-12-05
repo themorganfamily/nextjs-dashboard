@@ -5,6 +5,7 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
+  LatestCustomer,
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
@@ -40,6 +41,24 @@ export async function fetchLatestInvoices() {
     const latestInvoices = data.rows.map((invoice) => ({
       ...invoice,
       amount: formatCurrency(invoice.amount)
+    }));
+    return latestInvoices;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest invoices.');
+  }
+}
+
+export async function fetchLatestCustomers() {
+  try {
+    const data = await sql<LatestCustomer>`
+      SELECT customers.id, customers.date, customers.name, customers.email, customers.image_url, customers.email, customers.account_type
+      FROM customers
+      ORDER BY customers.date DESC
+      LIMIT 5`;
+
+    const latestInvoices = data.rows.map((customer) => ({
+      ...customer
     }));
     return latestInvoices;
   } catch (error) {
@@ -129,6 +148,41 @@ export async function fetchFilteredInvoices(
   }
 }
 
+export async function fetchFilteredCustomers(
+  query: string,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const customers = await sql<CustomersTableType>`
+      SELECT
+        customers.id,
+        customers.name,
+        customers.email,
+        customers.image_url,
+        customers.date,
+        customers.account_type,
+        customers.account_id,
+        customers.customer_id,
+        customers.consumer_id,
+        customers.tokenised
+      FROM customers
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        customers.email ILIKE ${`%${query}%`} OR
+        customers.account_type ILIKE ${`%${query}%`}
+      ORDER BY customers.date DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return customers.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch customers.');
+  }
+}
+
 export async function fetchInvoicesPages(query: string) {
   try {
     const count = await sql`SELECT COUNT(*)
@@ -198,36 +252,60 @@ export async function fetchCustomers() {
   }
 }
 
-export async function fetchFilteredCustomers(query: string) {
+export async function fetchTokenisedCustomers() {
   try {
-    const data = await sql<CustomersTableType>`
-		SELECT
-		  customers.id,
-		  customers.name,
-		  customers.email,
-		  customers.image_url,
-      customers.account_type,
-		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'authorised' THEN invoices.amount ELSE 0 END) AS total_authorised,
-		  SUM(CASE WHEN invoices.status = 'captured' THEN invoices.amount ELSE 0 END) AS total_captured
-		FROM customers
-		LEFT JOIN invoices ON customers.id = invoices.customer_id
-		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
-		GROUP BY customers.id, customers.name, customers.email, customers.image_url
-		ORDER BY customers.name ASC
-	  `;
+    const data = await sql<CustomerField>`
+      SELECT
+        id,
+        name,
+        email,
+        image_url,
+        account_type,
+        tokenised,
+        account_id
+      FROM customers
+      WHERE tokenised = true
+      ORDER BY name ASC
+    `;
 
-    const customers = data.rows.map((customer) => ({
-      ...customer,
-      total_authorised: formatCurrency(customer.total_authorised),
-      total_captured: formatCurrency(customer.total_captured),
-    }));
-
+    const customers = data.rows;
     return customers;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
+    throw new Error('Failed to fetch all customers.');
   }
 }
+
+// export async function fetchFilteredCustomers(query: string) {
+//   try {
+//     const data = await sql<CustomersTableType>`
+// 		SELECT
+// 		  customers.id,
+// 		  customers.name,
+// 		  customers.email,
+// 		  customers.image_url,
+//       customers.account_type,
+// 		  COUNT(invoices.id) AS total_invoices,
+// 		  SUM(CASE WHEN invoices.status = 'authorised' THEN invoices.amount ELSE 0 END) AS total_authorised,
+// 		  SUM(CASE WHEN invoices.status = 'captured' THEN invoices.amount ELSE 0 END) AS total_captured
+// 		FROM customers
+// 		LEFT JOIN invoices ON customers.id = invoices.customer_id
+// 		WHERE
+// 		  customers.name ILIKE ${`%${query}%`} OR
+//         customers.email ILIKE ${`%${query}%`}
+// 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
+// 		ORDER BY customers.name ASC
+// 	  `;
+
+//     const customers = data.rows.map((customer) => ({
+//       ...customer,
+//       total_authorised: formatCurrency(customer.total_authorised),
+//       total_captured: formatCurrency(customer.total_captured),
+//     }));
+
+//     return customers;
+//   } catch (err) {
+//     console.error('Database Error:', err);
+//     throw new Error('Failed to fetch customer table.');
+//   }
+// }

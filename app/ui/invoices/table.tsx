@@ -27,7 +27,6 @@ export default async function InvoicesTable({
                   className="mb-2 w-full rounded-md bg-white p-4"
                 >
                   <div className="flex items-center justify-between border-b pb-4">
-                    <div>
                       <div className="mb-2 flex items-center">
                         <Image
                           src={invoice.image_url}
@@ -39,7 +38,6 @@ export default async function InvoicesTable({
                         <p>{invoice.name}</p>
                       </div>
                       <p className="text-sm text-gray-500">{invoice.email}</p>
-                    </div>
                     {/* <InvoiceProduct product={invoice.product} /> */}
                     <InvoiceStatus status={invoice.status} />
                   </div>
@@ -81,9 +79,9 @@ export default async function InvoicesTable({
                   <th scope="col" className="px-3 py-5 font-medium">
                     Status
                   </th>
-                  <th scope="col" className="px-3 py-5 font-medium">
+                  {/* <th scope="col" className="px-3 py-5 font-medium">
                     Reference
-                  </th>
+                  </th> */}
                   <th scope="col" className="px-3 py-5 font-medium">
                     Receipt
                   </th>
@@ -102,14 +100,14 @@ export default async function InvoicesTable({
                 {invoices?.map((invoice) => (
                   <tr
                     key={invoice.id}
-                    className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                    className="w-full border-b py-3 text-sm [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                   >
                     <td className="whitespace-nowrap px-3 py-3 ">
                       <span className="rounded-full px-2 py-1 text-xs bg-gray-100"> {formatDateToLocal(invoice.date)} </span>
                     </td>
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
 
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 " style={{overflow: 'hidden'}}>
                         {/* <Image
                         src={invoice.image_url}
                         className="rounded-full"
@@ -117,7 +115,7 @@ export default async function InvoicesTable({
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
                       /> */}
-                        <p>{invoice.name}</p>
+                        <p>{invoice.email}</p>
                       </div>
                     </td>
                     {/* <td className="whitespace-nowrap px-3 py-3">
@@ -130,9 +128,9 @@ export default async function InvoicesTable({
                     <td className="whitespace-nowrap px-3 py-3">
                       <InvoiceStatus status={invoice.status} />
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3">
+                    {/* <td className="whitespace-nowrap px-3 py-3">
                       {invoice.reference}
-                    </td>
+                    </td> */}
                     <td className="whitespace-nowrap px-3 py-3">
                       {invoice.receipt_number}
                     </td>
@@ -151,7 +149,7 @@ export default async function InvoicesTable({
                           </>
                           :
                           <>
-                            <DeleteInvoice id={invoice.id} />
+                            {/* <DeleteInvoice id={invoice.id} /> */}
                           </>}
 
                       </div>

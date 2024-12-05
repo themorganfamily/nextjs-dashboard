@@ -1,5 +1,5 @@
-import { PencilIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { deleteInvoice, oldDeleteInvoice } from '@/app/lib/actions';
+import { PencilIcon, PlusCircleIcon, TrashIcon, LockOpenIcon, BanknotesIcon } from '@heroicons/react/24/outline';
+import { deleteInvoice, oldDeleteInvoice, deleteCustomer, topUpBalance} from '@/app/lib/actions';
 import Modal from '@/app/ui/invoices/modal';
 import { lusitana } from '@/app/ui/fonts';
 
@@ -100,15 +100,16 @@ export function DeleteInvoice({ id }: { id: string }) {
 }
 
 export function TopUp({ id }: { id: string }) {
-  const deleteInvoiceWithId = oldDeleteInvoice.bind(null, id);
-
+  const topUpWithConsumerId = topUpBalance.bind(null, id);
+  console.log(id + " iissss this.");
   return (
     <div>
       {/* <Modal /> */}
-      <form action={deleteInvoiceWithId}>
+      <form action={topUpWithConsumerId}>
         <button className="rounded-md border p-2 hover:bg-gray-100">
-          <span className="sr-only">Delete</span>
-          <TrashIcon className="w-5" />
+        {/* <button className="rounded-md border p-2 hover:bg-gray-100 w-20 text-sm flex h-10 items-center"> */}
+          <span className="sr-only">Top Up</span>
+          <BanknotesIcon className="w-5" />
         </button>
       </form>
     </div>
@@ -116,12 +117,28 @@ export function TopUp({ id }: { id: string }) {
 }
 
 export function Unlock({ id }: { id: string }) {
-  const deleteInvoiceWithId = oldDeleteInvoice.bind(null, id);
+  const deleteCustomerWithId = deleteCustomer.bind(null, id);
 
   return (
     <div>
       {/* <Modal /> */}
-      <form action={deleteInvoiceWithId}>
+      <form action={deleteCustomerWithId}>
+        <button className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Delete</span>
+          <LockOpenIcon className="w-5" />
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export function DeleteCustomer({ id }: { id: string }) {
+  const deleteCustomerWithId = deleteCustomer.bind(null, id);
+
+  return (
+    <div>
+      {/* <Modal /> */}
+      <form action={deleteCustomerWithId}>
         <button className="rounded-md border p-2 hover:bg-gray-100">
           <span className="sr-only">Delete</span>
           <TrashIcon className="w-5" />
