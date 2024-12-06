@@ -1,8 +1,10 @@
+'use client'
 import { PencilIcon, PlusCircleIcon, TrashIcon, LockOpenIcon, BanknotesIcon, MapIcon } from '@heroicons/react/24/outline';
-import { deleteInvoice, oldDeleteInvoice, deleteCustomer, topUpBalance, selectPaymentFlow} from '@/app/lib/actions';
+import { deleteInvoice, oldDeleteInvoice, deleteCustomer, topUpBalance, selectPaymentFlow, State, createUser} from '@/app/lib/actions';
 import Modal from '@/app/ui/invoices/modal';
 import { lusitana } from '@/app/ui/fonts';
-
+import { useActionState, useState } from "react"
+import { Oval } from "react-loader-spinner"
 
 import Link from 'next/link';
 
@@ -99,17 +101,47 @@ export function DeleteInvoice({ id }: { id: string }) {
   );
 }
 
-export function TopUp({ id }: { id: string }) {
-  const topUpWithConsumerId = topUpBalance.bind(null, id);
-  console.log(id + " iissss this.");
+export function TopUp({ id }: { id: string}) {
+  var initialState: State = { message: null, errors: {}, isLoading: false};
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  const clientSubmit = async () => {
+    setIsLoading(true);
+  }
+
+  const serverSubmit = async (prevState: State, formData: FormData) => {
+    // disableLoading();
+    setIsLoading(false);
+    const returnState: State = await topUpBalance(id, 100000);
+    return returnState;
+
+  }
+
+  const [state, formAction] = useActionState(serverSubmit, initialState);
+
+  // const topUpWithConsumerId = topUpBalance.bind(null, id, 100000);
   return (
     <div>
       {/* <Modal /> */}
-      <form action={topUpWithConsumerId}>
-        <button className="rounded-md border p-2 hover:bg-gray-100">
+      <form action={formAction}>
+        <button className="rounded-md border p-2 hover:bg-gray-100" onClick={clientSubmit}>
         {/* <button className="rounded-md border p-2 hover:bg-gray-100 w-20 text-sm flex h-10 items-center"> */}
           <span className="sr-only">Top Up</span>
+          {isLoading ? 
+           <Oval
+           visible={true}
+           height="20"
+           width="20"
+           color="#000000"
+           secondaryColor="#000000"
+           ariaLabel="oval-loading"
+           wrapperStyle={{minWidth:"20"}} // minWidth:"90"
+           wrapperClass=""
+           strokeWidth="6"
+       />
+          :
           <BanknotesIcon className="w-5" />
+}
         </button>
       </form>
     </div>

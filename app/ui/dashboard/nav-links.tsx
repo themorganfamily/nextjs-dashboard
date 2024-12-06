@@ -19,7 +19,7 @@ const links = [
   { name: 'Tool Kit', href: '/dashboard', icon: WrenchIcon },
   { name: 'Hosted Assets', href: '/assets', icon: CodeBracketIcon },
   {
-    name: 'Payment Flows',
+    name: 'Demo Payment Flows',
     href: '/dashboard/invoices/create',
     icon: MapIcon,
   },

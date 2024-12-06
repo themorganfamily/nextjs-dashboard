@@ -76,7 +76,7 @@ export default async function CustomersTable({
                     
                   </th> */}
                   <th scope="col" className="px-3 py-5 font-medium flex justify-end" >
-                    Top-up / Unlock
+                    Top-up
                   </th>
                 </tr>
               </thead>
@@ -116,7 +116,7 @@ export default async function CustomersTable({
                             <DeleteInvoice id={invoice.id} />
                           </>} */}
                         <TopUp id={customer.id} />
-                        <Unlock id={customer.consumer_id} />
+                        {/* <Unlock id={customer.consumer_id} /> */}
                         {/* <DeleteCustomer id={customer.id} /> */}
 
                       </div>

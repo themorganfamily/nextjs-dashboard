@@ -15,6 +15,10 @@ import { UUID } from 'crypto';
 
 // export const maxDuration = 60;
 
+export async function getServerSideProps(context:any) {
+    console.log(context.req.headers.referer)
+  }
+
 export async function authenticate(
     prevState: string | undefined,
     formData: FormData,
@@ -176,7 +180,40 @@ export async function selectPaymentFlow(id:string) {
     console.log("in select payment flow");
 }
 
-export async function topUpBalance(id:string) {
+export async function handleTopUp(prevState: State, formData: FormData) {
+
+    const email = formData.get("email");
+    const amount = formData.get("amount");
+
+    if (email !== undefined  && email !== null && email !== "") {
+
+        console.log("email exists");
+
+        if (amount !== undefined && amount !== null) {
+
+            console.log("amount exists");
+            
+            const customer = await getCustomer(email+"");
+
+            if (customer != undefined && customer != null) {
+                console.log("customer exists");
+                const balanceResult = await topUpBalance(customer.id, parseFloat(amount + ""));
+
+                revalidatePath('/dashboard/top-up');
+                redirect('/dashboard/top-up?result=success');
+            }
+            
+        
+        }
+
+       
+    }
+
+    const returnState: State = { message: "errorsssss", errors: {}, isLoading: false };
+    return returnState;
+}
+
+export async function topUpBalance(id:string, amount?:number) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     console.log("id: " + id)
@@ -184,17 +221,31 @@ export async function topUpBalance(id:string) {
     const accountId = customer?.account_id;
     const consumer_id = customer?.consumer_id
 
-    console.log(accountId + " - " + consumer_id)
+    console.log(accountId + " - " + consumer_id + " - " + amount)
+    let raw;
 
-    const raw = JSON.stringify({
-        "amount": 20000,
-        "classification": "repayment",
-        "consumerId": consumer_id + "",
-        "externalReference": "ref_" + Math.floor(Math.random() * 10000),
-        "method": "immediate",
-        "type": "credit",
-        "accountId": accountId + ""
-    });
+    if (amount !== undefined && amount != null) {
+        raw = JSON.stringify({
+            "amount": amount,
+            "classification": "repayment",
+            "consumerId": consumer_id + "",
+            "externalReference": "ref_" + Math.floor(Math.random() * 10000),
+            "method": "immediate",
+            "type": "credit",
+            "accountId": accountId + ""
+        });
+    }
+    else {
+        raw = JSON.stringify({
+            "amount": 100000,
+            "classification": "repayment",
+            "consumerId": consumer_id + "",
+            "externalReference": "ref_" + Math.floor(Math.random() * 10000),
+            "method": "immediate",
+            "type": "credit",
+            "accountId": accountId + ""
+        });
+    }
 
     const requestOptions = {
         method: "POST",
@@ -208,7 +259,10 @@ export async function topUpBalance(id:string) {
         .catch((error) => { console.error(error); return error });
 
         revalidatePath('/dashboard/customers');
-        //redirect('/dashboard/customers');
+        // redirect('/dashboard/customers');
+        const returnState: State = { message: null, errors: {}, isLoading: false };
+        return returnState;
+       
 }
 
 export async function fetchCustomerInfo(id:number) {
@@ -767,7 +821,7 @@ export async function createUser(prevState: State, formData: FormData) {
         if (zipUserResponse.email) {
             //await createInvoice(validatedFields.data.customerId, validatedFields.data.amount, validatedFields.data.status);
             const customerResult = await createCustomer(zipUserResponse, formData);
-            redirect('/dashboard/customers');
+            redirect('/dashboard');
             // ?page=1&query=' + zipUserResponse.email
         }
         // console.log("tets");

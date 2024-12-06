@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { SpinnerButton } from "../SpinnerButton"
 import { CustomerField } from '@/app/lib/definitions';
 import { useActionState } from 'react';
-import { State, redirectToZip, createUser } from '@/app/lib/actions';
+import { State, redirectToZip, createUser, handleTopUp } from '@/app/lib/actions';
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -15,11 +15,6 @@ import {
   AtSymbolIcon,
 } from '@heroicons/react/24/outline';
 import { getParsedType } from "zod";
-
-
-
-
-
 
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
@@ -47,7 +42,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
   const serverSubmit = async (prevState: State, formData: FormData) => {
     // disableLoading();
     setIsLoading(false);
-    const returnState: State = await createUser(prevState, formData);
+    const returnState: State = await handleTopUp(prevState, formData);
     return returnState;
 
   }
@@ -133,59 +128,59 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="accTypeZP"
-                  name="accType"
+                  id="20k"
+                  name="amount"
                   type="radio"
-                  value="zpv2"
+                  value="20000"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                  aria-describedby="status-error"
+                  aria-describedby="statusamount-error"
                   defaultChecked
                 />
                 <label
-                  htmlFor="accTypeZP"
+                  htmlFor="20k"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Zip Pay 
+                  $20k 
                   {/* <ClockIcon className="h-4 w-4" /> */}
                 </label>
               </div>
               <div className="flex items-center">
                 <input
-                  id="accTypeZM"
-                  name="accType"
+                  id="100k"
+                  name="amount"
                   type="radio"
-                  value="zmv2"
+                  value="100000"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
                   
                 />
                 <label
-                  htmlFor="accTypeZM"
+                  htmlFor="100k"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Zip Money 
+                  $100k
                   {/* <CheckIcon className="h-4 w-4" /> */}
                 </label>
               </div>
               <div className="flex items-center">
                 <input
-                  id="accTypeZPlus"
-                  name="accType"
+                  id="500k"
+                  name="amount"
                   type="radio"
-                  value="zplus"
+                  value="500000"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
                   
                 />
                 <label
-                  htmlFor="accTypeZPlus"
+                  htmlFor="500k"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Zip Plus 
+                  $500k  
                   {/* <CheckIcon className="h-4 w-4" /> */}
                 </label>
               </div>
@@ -214,7 +209,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         >
           Cancel
         </Link>
-        <SpinnerButton name="Create customer" state={isLoading} onClick={clientSubmit} type="submit" children="" />
+        <SpinnerButton name="Top-up balance" state={isLoading} onClick={clientSubmit} type="submit" children="" />
 
       </div>
 
