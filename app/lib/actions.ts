@@ -151,7 +151,7 @@ export async function createZipUser(prevState: State, formData: FormData) {
         body: raw
     };
 
-    return fetch("https://gq2bk003.aue.devtunnels.ms:3001/createuser", requestOptions)
+    return fetch("https://hlz64ll3.aue.devtunnels.ms:3001/createuser", requestOptions)
         .then((response) => response.json())
         .then((result) => { console.log(result); return result })
         .catch((error) => console.error(error));
@@ -199,7 +199,7 @@ export async function handleTopUp(prevState: State, formData: FormData) {
                 console.log("customer exists");
                 const balanceResult = await topUpBalance(customer.id, parseFloat(amount + ""));
 
-                revalidatePath('/dashboard/top-up');
+                //revalidatePath('/dashboard/top-up');
                 redirect('/dashboard/top-up?result=success');
             }
             
@@ -253,7 +253,7 @@ export async function topUpBalance(id:string, amount?:number) {
         body: raw
     };
 
-    const topUpResponse = await fetch("https://gq2bk003.aue.devtunnels.ms:3001/topup/" + accountId, requestOptions)
+    const topUpResponse = await fetch("https://hlz64ll3.aue.devtunnels.ms:3001/topup/" + accountId, requestOptions)
         .then((response) => response.json())
         .then((result) => { console.log(result); return result })
         .catch((error) => { console.error(error); return error });
@@ -274,7 +274,7 @@ export async function fetchCustomerInfo(id:number) {
       headers: myHeaders
     };
     
-    return fetch("https://gq2bk003.aue.devtunnels.ms:3001/customer/" + id, requestOptions)
+    return fetch("https://hlz64ll3.aue.devtunnels.ms:3001/customer/" + id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);

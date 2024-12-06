@@ -17,12 +17,18 @@ export const metadata: Metadata = {
 export default async function Page(props: {
     searchParams?: Promise<{
         email?: string;
+        result?: string;
     }>;
 }) {
     const searchParams = await props.searchParams;
     const email = searchParams?.email || '';
+    const result = searchParams?.result || '';
 
     let customer;
+
+    if (result === "success") {
+        console.log("here we go");
+    }
 
     const customers = await fetchCustomers();
 

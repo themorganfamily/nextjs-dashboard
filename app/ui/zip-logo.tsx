@@ -1,11 +1,11 @@
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
+// import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
 
 export default function ZipLogo() {
   return (
     <div
-      className={`${lusitana.className} flex flex-row items-center leading-none text-white`}
+      className={`flex flex-row items-center leading-none text-white`}
     >
       <Image
                       src="https://static.zip.co/logo/zip-logo.svg"

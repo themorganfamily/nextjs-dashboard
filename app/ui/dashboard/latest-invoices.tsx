@@ -1,7 +1,7 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { lusitana } from '@/app/ui/fonts';
+// import { lusitana } from '@/app/ui/fonts';
 import { LatestInvoice } from '@/app/lib/definitions';
 import { fetchLatestInvoices, fetchRevenue, fetchLatestCustomers } from '@/app/lib/data';
 import InvoiceProduct from '@/app/ui/invoices/product';
@@ -14,7 +14,7 @@ export default async function LatestInvoices() {
     const latestCustomers = await fetchLatestCustomers(); // Fetch data inside the component
     return (
       <div className="flex w-full flex-col md:col-span-3">
-        <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+        <h2 className={`mb-4 text-xl md:text-2xl`}>
           Latest Customers
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">

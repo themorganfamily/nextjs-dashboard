@@ -2,7 +2,7 @@
 import { PencilIcon, PlusCircleIcon, TrashIcon, LockOpenIcon, BanknotesIcon, MapIcon } from '@heroicons/react/24/outline';
 import { deleteInvoice, oldDeleteInvoice, deleteCustomer, topUpBalance, selectPaymentFlow, State, createUser} from '@/app/lib/actions';
 import Modal from '@/app/ui/invoices/modal';
-import { lusitana } from '@/app/ui/fonts';
+// import { lusitana } from '@/app/ui/fonts';
 import { useActionState, useState } from "react"
 import { Oval } from "react-loader-spinner"
 
@@ -47,7 +47,7 @@ export function CreateCustomer() {
 export function CreateCustomerToolKit() {
   return (
     <p
-    className={`${lusitana.className}
+    className={`
       truncate rounded-xl bg-white px-4 py-8 text-center text-2xl mt-1 h-30`}
   >
     
@@ -140,8 +140,11 @@ export function TopUp({ id }: { id: string}) {
            strokeWidth="6"
        />
           :
-          <BanknotesIcon className="w-5" />
-}
+          <>
+          <BanknotesIcon className="w-5" /> 
+          </>
+          
+  }
         </button>
       </form>
     </div>

@@ -32,13 +32,13 @@ export function CardSkeleton() {
   return (
 
     <div
-    className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-50 p-1 shadow-sm`}
+    className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-50 shadow-sm`}
   >
 
     <div className="flex items-center justify-center truncate rounded-xl bg-gray-50 h-40">
-      <div className="pr-2 rounded-md bg-gray-100">
+      {/* <div className="pr-2 rounded-md bg-gray-100">
         
-      </div>
+      </div> */}
      
     </div>
   </div>

@@ -11,7 +11,7 @@ import {
   MapIcon,
   LockOpenIcon
 } from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
+// import { lusitana } from '@/app/ui/fonts';
 import { CreateCheckout, CreateCustomer, CreateCustomerToolKit, GetMFA } from '../invoices/buttons';
 import Link from 'next/link';
 import { ArrowRightIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
@@ -150,7 +150,7 @@ export function Card({
         <h3 className="ml-2 text-sm font-medium">{title}</h3>
       </div>
       <p
-        className={`${lusitana.className}
+        className={`
           truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
       >
         {value}

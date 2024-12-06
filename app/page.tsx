@@ -2,7 +2,7 @@ import ZipLogo from '@/app/ui/zip-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 //import styles from '@/app/ui/home.module.css';
-import { lusitana } from '@/app/ui/fonts';
+// import { lusitana } from './ui/fonts';
 import Image from 'next/image';
 
 import { Metadata } from 'next';
@@ -30,7 +30,7 @@ export default function Page() {
             className="relative w-0 h-0 border-l-[15px] border-r-[15px] border-b-[26px] border-l-transparent border-r-transparent border-b-black"
           /> */}
           {/* <div className={styles.shape} /> */}
-          <p className={`${lusitana.className} antialiased text-xl text-gray-800 md:text-3xl md:leading-normal`}>
+          <p className={`antialiased text-xl text-gray-800 md:text-3xl md:leading-normal`}>
             <strong>Welcome to your boilerplate.</strong> This {' '}
             <a href="https://nextjs.org/learn/" className="text-blue-500">
             NEXT.js   </a>

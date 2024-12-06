@@ -143,7 +143,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 />
                 <label
                   htmlFor="accTypeZP"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full zip-lightest-bg px-3 py-1.5 text-xs font-medium "
                 >
                   Zip Pay 
                   {/* <ClockIcon className="h-4 w-4" /> */}
@@ -161,7 +161,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 />
                 <label
                   htmlFor="accTypeZM"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full zip-dark-bg text-white px-3 py-1.5 text-xs font-medium text-gray-600"
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
@@ -181,7 +181,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 />
                 <label
                   htmlFor="accTypeZPlus"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full zip-fearlessness-bg text-white px-3 py-1.5 text-xs font-medium "
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >

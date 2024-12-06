@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { lusitana } from '@/app/ui/fonts';
+// import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
 import {
   Customer,
@@ -75,9 +75,9 @@ export default async function CustomersTable({
                     <span className="sr-only">Edit</span>
                     
                   </th> */}
-                  <th scope="col" className="px-3 py-5 font-medium flex justify-end" >
+                  {/* <th scope="col" className="px-3 py-5 font-medium flex justify-end" >
                     Top-up
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
 
