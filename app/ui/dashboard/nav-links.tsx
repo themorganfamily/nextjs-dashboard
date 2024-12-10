@@ -16,15 +16,15 @@ import clsx from 'clsx';
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Tool Kit', href: '/dashboard', icon: WrenchIcon },
+  { name: 'Sandbox Tools', href: '/dashboard', icon: WrenchIcon },
   { name: 'Hosted Assets', href: '/assets', icon: CodeBracketIcon },
   {
     name: 'Demo Payment Flows',
     href: '/dashboard/invoices/create',
     icon: MapIcon,
   },
+  { name: 'Demo Order Management', href: '/dashboard/invoices', icon: CurrencyDollarIcon },
   { name: 'Test Customers', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'Order Management', href: '/dashboard/invoices', icon: CurrencyDollarIcon },
 ];
 
 export default function NavLinks() {

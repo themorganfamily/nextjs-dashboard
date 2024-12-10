@@ -37,7 +37,7 @@ export default async function InvoicesTable({
                         />
                         <p>{invoice.name}</p>
                       </div>
-                      <p className="text-sm text-gray-500">{invoice.email}</p>
+                      {/* <p className="text-sm text-gray-500">{invoice.email}</p> */}
                     {/* <InvoiceProduct product={invoice.product} /> */}
                     <InvoiceStatus status={invoice.status} />
                   </div>
@@ -54,7 +54,7 @@ export default async function InvoicesTable({
                     {/* <InvoiceIFM product={invoice.product} interestFreeMonths={invoice.interest_free_months}/> */}
                     <div className="flex justify-end gap-2">
                       <UpdateInvoice id={invoice.id} />
-                      <DeleteInvoice id={invoice.id} />
+                      {/* <DeleteInvoice id={invoice.id} /> */}
                     </div>
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export default async function InvoicesTable({
                         {(invoice.status !== 'refunded' && invoice.status !== 'cancelled') ?
                           <>
                             <UpdateInvoice id={invoice.id} />
-                            <DeleteInvoice id={invoice.id} />
+                            {/* <DeleteInvoice id={invoice.id} /> */}
                           </>
                           :
                           <>

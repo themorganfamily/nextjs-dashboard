@@ -4,7 +4,9 @@ import { useState, useEffect } from "react"
 import { SpinnerButton } from "../SpinnerButton"
 import { CustomerField } from '@/app/lib/definitions';
 import { useActionState } from 'react';
-import { State, redirectToZip, createUser } from '@/app/lib/actions';
+import { State, redirectToZip, createUser, closeModal } from '@/app/lib/actions';
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -13,8 +15,11 @@ import {
   UserCircleIcon,
   UsersIcon,
   AtSymbolIcon,
+  DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline';
-import { getParsedType } from "zod";
+import { boolean, getParsedType } from "zod";
+import BasicModal from "@/app/ui/basicModal";
+import Modal from '@/app/ui/invoices/modal';
 
 
 
@@ -24,15 +29,40 @@ import { getParsedType } from "zod";
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  var initialState: State = { message: null, errors: {}, isLoading: false};
-  var clientSideValidation = false;
+  const [modalVisible, showModal] = useState<boolean>(false);
+  const [sitTight, showSitTight] = useState<boolean>(true);
 
+  var initialState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: 'Sit tight, this can take a minute', modalMessage: 'Your new Zip account is on the way!' };
   // useEffect(() => {
   //   var amountInput = document.querySelector("amount");
   //   amountInput?.addEventListener("keyup", () => {
   //     console.log("why");
   //   })
   // }, []);
+
+  var modalProps = {};
+
+  const showHide = async (val: boolean) => {
+    showModal(val);
+  }
+
+  // if (email !== undefined && result !== undefined){
+  //   showModal(true);
+  // }
+
+  const toggleSitTight = async () => {
+
+    type Timer = ReturnType<typeof setTimeout>
+
+    const timer: Timer = setTimeout(() => {
+      // showModal(true);
+
+      showSitTight(!sitTight);
+      console.log(!sitTight);
+
+    }, 1000)
+
+  }
 
   const clientSubmit = async () => {
 
@@ -41,26 +71,156 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
     //       state.message = null;
     //       state.errors = {};
     // }
+
     setIsLoading(true);
+
+    type Timer = ReturnType<typeof setTimeout>
+
+    const timer: Timer = setTimeout(() => {
+      // showModal(true);
+
+      showModal(true);
+
+      const timer: Timer = setTimeout(() => {
+        // showModal(true);
+
+        // showModal(false);
+        // toggleSitTight();
+
+      }, 6000)
+
+    }, 8000)
   }
+
+
+
 
   const serverSubmit = async (prevState: State, formData: FormData) => {
     // disableLoading();
     setIsLoading(false);
     const returnState: State = await createUser(prevState, formData);
+
+    console.log(returnState);
+    var newEmail = ""
+    // if(returnState.email !== undefined && returnState.email !== null) {
+    //   newEmail = returnState.email;
+    //   returnState.email = undefined;
+    // }
+    showModal(false);
+
+
+    type Timer = ReturnType<typeof setTimeout>
+    const timer: Timer = setTimeout(() => {
+      showSitTight(false);
+      showModal(true);
+    }, 200)
+
+
+    // router.push('/about')
     return returnState;
 
   }
 
   const [state, formAction] = useActionState(serverSubmit, initialState);
 
-//   if (state.message !== null) {
-//     amount = undefined;
-//   }
+
+  //   if (state.message !== null) {
+  //     amount = undefined;
+  //   }
+  const copyEmail = async (email: string) => {
+    navigator.clipboard.writeText(email);
+  }
 
   return (
-    <form action={formAction} aria-describedby="form-error">
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+    <form action={formAction} aria-describedby="form-error" >
+      {/* 
+      {modalVisible ?
+        <> */}
+
+      <Dialog id="confimrationModal" open={modalVisible} onClose={() => { showModal(false); toggleSitTight(); }} className="relative z-10">
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+        />
+
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <DialogPanel
+              transition
+              className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
+            >
+              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  {sitTight ?
+                    <>
+                      <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10">
+                        <ClockIcon aria-hidden="true" className="size-6 zip-dark-text" />
+                      </div>
+                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+
+
+
+                        <DialogTitle as="h3" className="text-base font-semibold text-gray-900">
+                          Sit tight, this can take a minute
+                        </DialogTitle>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            Your new Zip account is on the way!
+                          </p>
+
+                        </div>
+                      </div>
+                    </>
+                    :
+                    <>
+                      <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10">
+                        <CheckIcon aria-hidden="true" className="size-6 zip-dark-text" />
+                      </div>
+                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <DialogTitle as="h3" className="text-base font-semibold text-gray-900">
+                          {state.title}
+                        </DialogTitle>
+                        <div className="mt-2">
+                          <p className="text-sm flex text-gray-500">
+                            Username <button className='zip-medium-text flex items-center gap-1 pl-1' onClick={() => copyEmail(state.email + "")}>{state.email} <DocumentDuplicateIcon aria-hidden="true" className="size-4 zip-medium-text" /></button>
+                          </p>
+                          <p className="text-sm text-gray-500 pt-3">
+                            Proceed to our tooklit to demo our payment flows or to top up your test account balance.
+                          </p>
+
+                        </div>
+
+                      </div>
+                    </>
+                  }
+                </div>
+              </div>
+
+              <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+
+                <button
+                  type="button"
+                  data-autofocus
+                  // onClick={() => showModal(false)}
+                  onClick={() => { showModal(false); toggleSitTight(); }}
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* <Modal modalProps={modalProps} ></Modal> */}
+
+      {/* </>
+        :
+       null
+      } */}
+
+      <div className="rounded-lg bg-gray-50 md:p-6">
         {/* Customer Name */}
         <div className="mb-4" hidden>
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
@@ -109,7 +269,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 placeholder="Enter a valid email"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
-                // defaultValue={email}
+              // defaultValue={email}
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -145,7 +305,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   htmlFor="accTypeZP"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full zip-lightest-bg px-3 py-1.5 text-xs font-medium "
                 >
-                  Zip Pay 
+                  Zip Pay
                   {/* <ClockIcon className="h-4 w-4" /> */}
                 </label>
               </div>
@@ -157,7 +317,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   value="zmv2"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
-                  
+
                 />
                 <label
                   htmlFor="accTypeZM"
@@ -165,7 +325,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Zip Money 
+                  Zip Money
                   {/* <CheckIcon className="h-4 w-4" /> */}
                 </label>
               </div>
@@ -177,7 +337,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   value="zplus"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   aria-describedby="status-error"
-                  
+
                 />
                 <label
                   htmlFor="accTypeZPlus"
@@ -185,13 +345,13 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
                 //   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Zip Plus 
+                  Zip Plus
                   {/* <CheckIcon className="h-4 w-4" /> */}
                 </label>
               </div>
             </div>
           </div>
-          
+
           <div id="accType-error" aria-live="polite" aria-atomic="true">
             {state.errors?.accType &&
               state.errors.accType.map((error: string) => (

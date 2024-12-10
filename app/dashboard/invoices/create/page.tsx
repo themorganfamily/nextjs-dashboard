@@ -118,7 +118,7 @@ export default async function Page(props: {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Orders', href: '/dashboard/invoices' },
+          { label: 'Sandbox Tools', href: '/dashboard' },
           {
             label: 'Create Order',
             href: '/dashboard/invoices/create',

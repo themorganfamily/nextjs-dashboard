@@ -37,7 +37,7 @@ export default async function Page(props: {
         <main>
             <Breadcrumbs
                 breadcrumbs={[
-                    { label: 'Tool Kit', href: '/dashboard' },
+                    { label: 'Sandbox Tools', href: '/dashboard' },
                     {
                         label: 'Top-up Balance',
                         href: '/dashboard/top-up',

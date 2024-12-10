@@ -32,10 +32,10 @@ export function CardSkeleton() {
   return (
 
     <div
-    className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-50 shadow-sm`}
+    className={`${shimmer} relative overflow-hidden rounded-xl bg-white border border-0 border-gray-200`}
   >
 
-    <div className="flex items-center justify-center truncate rounded-xl bg-gray-50 h-40">
+    <div className="flex items-center justify-center truncate rounded-xl bg-gray-50 h-20">
       {/* <div className="pr-2 rounded-md bg-gray-100">
         
       </div> */}
@@ -126,13 +126,13 @@ export default function DashboardSkeleton() {
       <div
         className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
       />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-8">
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
+      <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <RevenueChartSkeleton />
         <LatestInvoicesSkeleton />
       </div>

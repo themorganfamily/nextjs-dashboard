@@ -61,12 +61,43 @@ export default async function CardWrapper() {
 
       {/* <div className="flex items-center justify-center truncate rounded-xl bg-white h-80"> */}
         {/* <div className="pr-2 rounded-md bg-gray-100"> */}
+
+
         <Link
           href="/dashboard/customers/create"
           // className=" rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50 hover:bg-gray-100 hover:shadow-black-100 hover:shadow-md h-40"
-          className=" rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50 hover:shadow-black-100 hover:shadow-md h-40"
+          className=" rounded-xl  px-5 pt-1 truncate rounded-xl bg-gray-50 border border-0 border-gray-200 hover:shadow-black-100 hover:bg-gray-50 h-20"
         >
-         Create customer <UserPlusIcon className="h-7 md:mr-2 ml-4 justify-end" />
+
+        <div className={'flex flex-row items-center justify-between py-4'} >
+          <div className="flex items-center">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold md:text-base">
+                Create customer
+              </p>
+              {/* <p className="hidden text-sm text-gray-500 sm:block"> */}
+              {/* Generate a test account to test with
+              </p> */}
+            </div>
+          </div>
+          <p className={` truncate text-sm font-medium md:text-base flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10`}
+          >
+
+            <UserPlusIcon aria-hidden="true" className="size-6 justify-end zip-dark-text" />
+          </p>
+        </div>
+
+           {/* <div className="flex items-center justify-start">
+         <span className='font-bold'>Create customer</span> 
+         </div>
+         <div className="flex items-center justify-end">
+         <div className="flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10">
+                  <UserPlusIcon aria-hidden="true" className="size-6 justify-end zip-dark-text" />
+                </div>
+         </div> */}
+         
+                
+                {/* <UserPlusIcon className="h-7 md:mr-2 ml-4 justify-end" /> */}
         </Link>
          
         {/* </div> */}
@@ -81,10 +112,27 @@ export default async function CardWrapper() {
         <Link
           href="/dashboard/top-up"
           // className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-50 hover:bg-slate-100 hover:shadow-black-100 hover:shadow-md h-40"
-          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50  hover:shadow-black-100 hover:shadow-md h-40"
+          className="rounded-xl  px-5 pt-1 truncate rounded-xl bg-gray-50 border border-0 border-gray-200 hover:shadow-black-100 hover:bg-gray-50 h-20"
 
        >
-          Top up balance <CurrencyDollarIcon className="h-7 md:mr-2 ml-4 justify-end" />
+        <div className={'flex flex-row items-center justify-between py-4'} >
+          <div className="flex items-center">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold md:text-base">
+                Top up balance
+              </p>
+              {/* <p className="hidden text-sm text-gray-500 sm:block"> */}
+              {/* Generate a test account to test with
+              </p> */}
+            </div>
+          </div>
+          <p className={` truncate text-sm font-medium md:text-base flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10`}
+          >
+
+            <CurrencyDollarIcon aria-hidden="true" className="size-6 justify-end zip-dark-text" />
+          </p>
+        </div>
+          {/* <CurrencyDollarIcon className="h-7 md:mr-2 ml-4 justify-end" /> */}
         </Link>
          
         {/* </div> */}
@@ -98,10 +146,27 @@ export default async function CardWrapper() {
         <Link
           href="/dashboard/customers/create"
           // className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-100 hover:bg-slate-200 hover:shadow-black-100 hover:shadow-md h-40"
-          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50  hover:shadow-black-100 hover:shadow-md h-40"
+          className="rounded-xl  px-5 pt-1 truncate rounded-xl bg-gray-50 border border-0 border-gray-200 hover:shadow-black-100 hover:bg-gray-50 h-20"
 
        >
-          Unlock customer <LockOpenIcon className="h-7 md:mr-2 ml-4 justify-end" />
+          <div className={'flex flex-row items-center justify-between py-4'} >
+          <div className="flex items-center">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold md:text-base">
+                Unlock customer
+              </p>
+              {/* <p className="hidden text-sm text-gray-500 sm:block"> */}
+              {/* Generate a test account to test with
+              </p> */}
+            </div>
+          </div>
+          <p className={` truncate text-sm font-medium md:text-base flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10`}
+          >
+
+            <LockOpenIcon aria-hidden="true" className="size-6 justify-end zip-dark-text" />
+          </p>
+        </div>
+
         </Link>
          
         {/* </div> */}
@@ -114,10 +179,27 @@ export default async function CardWrapper() {
         <Link
           href="/dashboard/invoices/create"
           // className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-200 hover:bg-slate-300 hover:shadow-black-100 hover:shadow-md h-40"
-          className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-gray-50  hover:shadow-black-100 hover:shadow-md h-40"
-
+          className="rounded-xl  px-5 pt-1 truncate rounded-xl bg-gray-50 border border-0 border-gray-200 hover:shadow-black-100 hover:bg-gray-50 h-20"
         >
-          Demo payment flows <MapIcon className="h-7 md:mr-2 ml-4 justify-end" />
+          <div className={'flex flex-row items-center justify-between py-4'} >
+          <div className="flex items-center">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold md:text-base">
+              Demo payment flows
+              </p>
+              {/* <p className="hidden text-sm text-gray-500 sm:block"> */}
+              {/* Generate a test account to test with
+              </p> */}
+            </div>
+          </div>
+          <p className={` truncate text-sm font-medium md:text-base flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10`}
+          >
+
+            <MapIcon aria-hidden="true" className="size-6 justify-end zip-dark-text" />
+          </p>
+        </div>
+
+         
         </Link>
          
         {/* </div> */}

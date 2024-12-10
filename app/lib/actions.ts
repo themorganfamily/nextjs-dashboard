@@ -151,7 +151,7 @@ export async function createZipUser(prevState: State, formData: FormData) {
         body: raw
     };
 
-    return fetch("https://hlz64ll3.aue.devtunnels.ms:3001/createuser", requestOptions)
+    return fetch("https://hm3cvvxq.aue.devtunnels.ms:3001/createuser", requestOptions)
         .then((response) => response.json())
         .then((result) => { console.log(result); return result })
         .catch((error) => console.error(error));
@@ -253,7 +253,7 @@ export async function topUpBalance(id:string, amount?:number) {
         body: raw
     };
 
-    const topUpResponse = await fetch("https://hlz64ll3.aue.devtunnels.ms:3001/topup/" + accountId, requestOptions)
+    const topUpResponse = await fetch("https://hm3cvvxq.aue.devtunnels.ms:3001/topup/" + accountId, requestOptions)
         .then((response) => response.json())
         .then((result) => { console.log(result); return result })
         .catch((error) => { console.error(error); return error });
@@ -274,7 +274,7 @@ export async function fetchCustomerInfo(id:number) {
       headers: myHeaders
     };
     
-    return fetch("https://hlz64ll3.aue.devtunnels.ms:3001/customer/" + id, requestOptions)
+    return fetch("https://hm3cvvxq.aue.devtunnels.ms:3001/customer/" + id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -802,6 +802,14 @@ export async function validateForm(prevState: State, formData: FormData) {
     // return {result: true}
 }
 
+export async function closeModal() {
+
+        const returnState: State = { modalVisible: false, title: 'Sit tight, this can take a minute', modalMessage: 'Your new Zip account is on the way!', email: null};
+            return returnState;
+
+        // console.log("tets");
+}
+
 export async function createUser(prevState: State, formData: FormData) {
 
     //console.log(formData);
@@ -820,13 +828,18 @@ export async function createUser(prevState: State, formData: FormData) {
         const zipUserResponse = await createZipUser(prevState, formData)
         if (zipUserResponse.email) {
             //await createInvoice(validatedFields.data.customerId, validatedFields.data.amount, validatedFields.data.status);
-            const customerResult = await createCustomer(zipUserResponse, formData);
-            redirect('/dashboard');
+            const customerEmail = await createCustomer(zipUserResponse, formData);
+            //redirect('/dashboard/customers/create?result=success&email=' + customerEmail);
             // ?page=1&query=' + zipUserResponse.email
+            const returnState: State = { message: null, errors: {}, isLoading: false, modalVisible: true, title: `Account created succesfully!`, email: customerEmail, success: true };
+            return returnState;
         }
+
+        const returnState: State = { message: null, errors: {}, isLoading: false, modalVisible: true, title: `Account creation failed!`, modalMessage: 'Please try again shortly, there seems to be a downstream issue.', success: false};
+            return returnState;
+
         // console.log("tets");
-        const returnState: State = { message: null, errors: {}, isLoading: false };
-        return returnState;
+       
     }
 
 }
@@ -1644,5 +1657,10 @@ export type State = {
     message?: string | null;
     isLoading?: boolean | null;
     otp?: string | null;
+    modalVisible?: boolean | null;
+    title?: string | null;
+    email?: string | null;
+    modalMessage?: string | null;
+    success?: boolean | null;
 };
 

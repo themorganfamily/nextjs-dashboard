@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
+  
   // const revenue = await fetchRevenue();
   const latestInvoices = await fetchLatestInvoices();
   // const {
@@ -21,13 +22,15 @@ export default async function Page() {
   //   totalCapturedInvoices,
   //   totalAuthorisedInvoices,
   // } = await fetchCardData();
+  
 
   return (
-    <main>
+    <main >
+      
       <h1 className={` mb-4 text-xl md:text-2xl`}>
-        Sandbox Tool Kit
+        Sandbox Tools
       </h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-8">
         <Suspense fallback={<CardsSkeleton />}>
           <CardWrapper />
           {/* <CardsSkeleton /> */}
@@ -41,7 +44,7 @@ export default async function Page() {
           type="customers"
         /> */}
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
+      <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <Suspense fallback={<RevenueChartSkeleton />}>
           <RevenueChart />
           {/* <RevenueChartSkeleton /> */}
