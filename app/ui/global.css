@@ -125,3 +125,14 @@ html {
 .form-width {
   max-width:800px;
 }
+
+.zip-font {
+  font-family: "Sharp Grotesk", "Helvetica" !important;
+}
+
+h1.zip-font {
+  /* font-family: Sharp Grotesk !important; */
+  font-weight: 500;
+  font-family: "Sharp Grotesk 25" !important;
+  font-size: 1.5em;
+}

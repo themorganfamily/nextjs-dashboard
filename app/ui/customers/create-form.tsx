@@ -181,9 +181,9 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                           {state.title}
                         </DialogTitle>
                         <div className="mt-2">
-                          <p className="text-sm flex text-gray-500 pb-2 pt-1">
-                            <button className='zip-medium-text flex items-center gap-1 pl-1' onClick={() => copyEmail(state.email + "")}>{state.email} <DocumentDuplicateIcon aria-hidden="true" className="size-4 zip-medium-text" /></button>
-                          </p>
+                          <p className="text-sm text-gray-500 pb-2 pt-1 inline-flex justify-center">
+                            <button className='zip-medium-text flex items-center gap-1 justify-center ' onClick={() => copyEmail(state.email + "")}>{state.email} <DocumentDuplicateIcon aria-hidden="true" className="size-4 zip-medium-text" /></button>
+                          </p><br></br>
                           <p className="text-sm text-gray-500 inline">
                           <span className="inline text-sm">Proceed to our </span>
                             <Link
