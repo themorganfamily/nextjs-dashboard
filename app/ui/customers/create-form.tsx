@@ -182,7 +182,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                         </DialogTitle>
                         <div className="mt-2">
                           <p className="text-sm flex text-gray-500 pb-2 pt-1">
-                            Username <button className='zip-medium-text flex items-center gap-1 pl-1' onClick={() => copyEmail(state.email + "")}>{state.email} <DocumentDuplicateIcon aria-hidden="true" className="size-4 zip-medium-text" /></button>
+                            <button className='zip-medium-text flex items-center gap-1 pl-1' onClick={() => copyEmail(state.email + "")}>{state.email} <DocumentDuplicateIcon aria-hidden="true" className="size-4 zip-medium-text" /></button>
                           </p>
                           <p className="text-sm text-gray-500 inline">
                           <span className="inline text-sm">Proceed to our </span>
@@ -272,7 +272,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="Enter a valid email"
+                placeholder="Optional"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
               // defaultValue={email}

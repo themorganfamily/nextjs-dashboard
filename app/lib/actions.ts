@@ -83,7 +83,7 @@ const FormSchemaUpdate = z.object({
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true, email: true, accType: true });
-const CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true, creditProductId: true });
+var CreateCustomerAccount = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true, creditProductId: true});
 
 async function getUser(email: string): Promise<User | undefined> {
     try {
@@ -201,7 +201,7 @@ export async function handleTopUp(prevState: State, formData: FormData) {
                 console.log("customer exists");
                 const balanceResult = await topUpBalance(customer.id, parseFloat(amount + ""));
 
-                const returnState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: 'Balance top up succesful!', modalMessage: 'Your new Zip account balance has been boosetd to allow for repeated testing!'  };
+                const returnState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: 'Top up succesful!', modalMessage: 'Your new Zip account balance has been boosetd to allow for repeated testing!'  };
                 return returnState;
                 //revalidatePath('/dashboard/top-up');
                // redirect('/dashboard/top-up?result=success');
@@ -725,11 +725,18 @@ export async function handleCheckoutResult(result: string, checkoutId: string) {
 
 export async function validateCustomerForm(prevState: State, formData: FormData) {
     console.log(formData);
-    const user = await getUser("user@nextmail.com");
-    const validatedFields = CreateCustomerAccount.safeParse({
+    const CreateCustomerAccountNoEmail = FormSchema.omit({ id: true, date: true, status: true, amount: true, customerId: true, creditProductId: true, email: true });
+    var validatedFields = CreateCustomerAccountNoEmail.safeParse({
         email: formData.get("email"),
         accType: formData.get("accType"),
     });
+    if(formData.get("email") !== undefined && formData.get("email") !== null && formData.get("email") !== ""){
+        validatedFields = CreateCustomerAccount.safeParse({
+            email: formData.get("email"),
+            accType: formData.get("accType"),
+        });
+    }
+    
     console.log("test" + validatedFields.error);
 
     if (validatedFields.error !== undefined) {
@@ -817,6 +824,7 @@ export async function closeModal() {
 export async function createUser(prevState: State, formData: FormData) {
 
     //console.log(formData);
+   
     const validForm = await validateCustomerForm(prevState, formData);
     if (validForm.message !== null && validForm.message !== undefined) {
         //console.log("invalid " + validForm.message);
