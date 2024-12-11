@@ -72,7 +72,7 @@ export default async function CardWrapper() {
         <div className={'flex flex-row items-center justify-between py-4'} >
           <div className="flex items-center">
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold md:text-base">
+              <p className="truncate text-sm font-semibold md:text-base ">
                 Create customer
               </p>
               {/* <p className="hidden text-sm text-gray-500 sm:block"> */}

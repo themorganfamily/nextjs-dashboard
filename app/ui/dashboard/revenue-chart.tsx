@@ -35,7 +35,7 @@ export default async function RevenueChart() { // Make component async, remove t
           data-env="production"
           data-zm-merchant="insert your AU merchant public key here or leave empty for other regions"      
           data-zm-price="insert product price here" 
-          data-zm-asset="productwidget" 
+          data-zm-asset="landingpage" 
           data-zm-popup-asset="termsdialog" 
           >
       </div>
