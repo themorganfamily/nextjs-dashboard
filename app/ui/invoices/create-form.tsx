@@ -109,7 +109,7 @@ export default function Form({
 
   return (
     <form action={formAction} aria-describedby="form-error">
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="rounded-md bg-white p-4 md:p-6">
 
         {/* Payment flow */}
 

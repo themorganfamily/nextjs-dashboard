@@ -15,11 +15,14 @@ import {
   AtSymbolIcon,
 } from '@heroicons/react/24/outline';
 import { getParsedType } from "zod";
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  var initialState: State = { message: null, errors: {}, isLoading: false};
+  const [modalVisible, showModal] = useState<boolean>(false);
+
+  var initialState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: 'Top up succesful!', modalMessage: 'Your new Zip account balance has been boosetd to allow for repeated testing!' };
   var clientSideValidation = false;
 
   // useEffect(() => {
@@ -43,6 +46,15 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
     // disableLoading();
     setIsLoading(false);
     const returnState: State = await handleTopUp(prevState, formData);
+
+    showModal(false);
+
+    type Timer = ReturnType<typeof setTimeout>
+    const timer: Timer = setTimeout(() => {
+   
+      showModal(true);
+    }, 200)
+
     return returnState;
 
   }
@@ -55,7 +67,70 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
   return (
     <form action={formAction} aria-describedby="form-error">
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+
+<Dialog id="confimrationModal" open={modalVisible} onClose={() => { showModal(false);  }} className="relative z-10">
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+        />
+
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <DialogPanel
+              transition
+              className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
+            >
+              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+      
+                    <>
+                      <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full zip-lightest-bg sm:mx-0 sm:size-10">
+                        <CheckIcon aria-hidden="true" className="size-6 zip-dark-text" />
+                      </div>
+                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <DialogTitle as="h3" className="text-base font-semibold text-gray-900">
+                          {state.title}
+                        </DialogTitle>
+                        <div className="mt-2">
+                          
+                           <p className="text-sm text-gray-500 inline">
+                          <span className="inline text-sm">Proceed to our </span>
+                            <Link
+                              href="/dashboard"
+                              className="inline-flex zip-fearlessness-text text-sm inline"
+                            >
+                              sandbox tools
+                            </Link> to demo our payment flows or create additional account types for testing!
+                          </p>
+
+                        </div>
+
+                      </div>
+                    </>
+                  
+                </div>
+              </div>
+
+
+              <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+
+                <button
+                  type="button"
+                  data-autofocus
+                  // onClick={() => showModal(false)}
+                  onClick={() => { showModal(false); }}
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
+
+
+      <div className="rounded-md bg-white p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4" hidden>
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">

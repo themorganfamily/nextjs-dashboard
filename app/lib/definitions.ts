@@ -21,6 +21,7 @@ export type Customer = {
   consumer_id: string;
   account_id: string;
   customer_id: string;
+  date: string;
 };
 
 export type CreditProduct = {
@@ -96,6 +97,7 @@ export type CustomersTableType = {
   total_captured: number;
   tokenised: boolean;
   consumer_id: string;
+  date: string;
 };
 
 export type FormattedCustomersTable = {
@@ -105,6 +107,7 @@ export type FormattedCustomersTable = {
   image_url: string;
   account_type: string;
   tokenised: boolean;
+  date: string;
 };
 
 export type CustomerField = {
@@ -112,6 +115,7 @@ export type CustomerField = {
   name: string;
   email: string;
   account_type: string;
+  date: string
 };
 
 export type InvoiceForm = {

@@ -32,7 +32,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
   const [modalVisible, showModal] = useState<boolean>(false);
   const [sitTight, showSitTight] = useState<boolean>(true);
 
-  var initialState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: 'Sit tight, this can take a minute', modalMessage: 'Your new Zip account is on the way!' };
+  var initialState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: " We're almost there!", modalMessage: 'This can take a sec, but rest assured your new Zip account is on the way!' };
   // useEffect(() => {
   //   var amountInput = document.querySelector("amount");
   //   amountInput?.addEventListener("keyup", () => {
@@ -89,7 +89,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
       }, 6000)
 
-    }, 8000)
+    }, 11000)
   }
 
 
@@ -161,11 +161,11 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
 
                         <DialogTitle as="h3" className="text-base font-semibold text-gray-900">
-                          Sit tight, this can take a minute
+                          We're almost there!
                         </DialogTitle>
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">
-                            Your new Zip account is on the way!
+                            This can take a sec, but rest assured your new Zip account is on the way!
                           </p>
 
                         </div>
@@ -181,11 +181,17 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                           {state.title}
                         </DialogTitle>
                         <div className="mt-2">
-                          <p className="text-sm flex text-gray-500">
+                          <p className="text-sm flex text-gray-500 pb-2 pt-1">
                             Username <button className='zip-medium-text flex items-center gap-1 pl-1' onClick={() => copyEmail(state.email + "")}>{state.email} <DocumentDuplicateIcon aria-hidden="true" className="size-4 zip-medium-text" /></button>
                           </p>
-                          <p className="text-sm text-gray-500 pt-3">
-                            Proceed to our tooklit to demo our payment flows or to top up your test account balance.
+                          <p className="text-sm text-gray-500 inline">
+                          <span className="inline text-sm">Proceed to our </span>
+                            <Link
+                              href="/dashboard"
+                              className="inline-flex zip-fearlessness-text text-sm inline"
+                            >
+                              sandbox tools
+                            </Link> to demo our payment flows or to top up your account balance for testing!
                           </p>
 
                         </div>
@@ -220,7 +226,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
        null
       } */}
 
-      <div className="rounded-lg bg-gray-50 md:p-6">
+      <div className="rounded-lg bg-white md:p-6">
         {/* Customer Name */}
         <div className="mb-4" hidden>
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">

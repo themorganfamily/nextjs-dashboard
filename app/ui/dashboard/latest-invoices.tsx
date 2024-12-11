@@ -15,7 +15,7 @@ export default async function LatestInvoices() {
     return (
       <div className="flex w-full flex-col md:col-span-3">
         <h2 className={`mb-4 text-lg md:text-xl`}>
-          Latest Customers
+          New Test Customers
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
           {/* NOTE: Uncomment this code in Chapter 7 */}

@@ -10,6 +10,8 @@ import { TopUp, Unlock, DeleteCustomer } from '@/app/ui/invoices/buttons';
 import InvoiceProduct from '@/app/ui/invoices/product';
 import Tokenised from '@/app/ui/invoices/tokenised';
 import { fetchFilteredCustomers } from '@/app/lib/data';
+import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
+
 
 export default async function CustomersTable({
   query,
@@ -59,6 +61,9 @@ export default async function CustomersTable({
             <table className="hidden min-w-full rounded-md text-gray-900 md:table">
               <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
                 <tr>
+                <th scope="col" className="px-3 py-5 font-medium">
+                    Date Created
+                  </th>
                   <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Email
                   </th>
@@ -70,6 +75,9 @@ export default async function CustomersTable({
                   </th>
                   <th scope="col" className="px-3 py-5 font-medium">
                     Tokenised?
+                  </th>
+                  <th scope="col" className="px-3 py-5 font-medium flex justify-end">
+                    Top up $100k
                   </th>
                   {/* <th scope="col" className="relative py-3 pl-6 pr-3">
                     <span className="sr-only">Edit</span>
@@ -84,15 +92,19 @@ export default async function CustomersTable({
               <tbody className="divide-y divide-gray-200 text-gray-900">
                 {customers.map((customer) => (
                   <tr key={customer.id} className="group">
+                        
+                        <td className="whitespace-nowrap px-3 py-3 bg-white ">
+                        <span className="rounded-full px-2 py-1 text-xs bg-gray-100"> {formatDateToLocal(customer.date)} </span>
+                    </td>
                     <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                       <div className="flex items-center gap-3">
-                        <Image
+                        {/* <Image
                           src={customer.image_url}
                           className="rounded-full"
                           alt={`${customer.name}'s profile picture`}
                           width={28}
                           height={28}
-                        />
+                        /> */}
                         <p>{customer.email}</p>
                       </div>
                     </td>

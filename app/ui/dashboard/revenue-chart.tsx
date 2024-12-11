@@ -24,7 +24,7 @@ export default async function RevenueChart() { // Make component async, remove t
   return (
     <div className={` relative w-full overflow-hidden md:col-span-5`}>
       <h2 className={`mb-4 text-lg md:text-xl`}>
-          Important Updates
+          Latest Updates
         </h2>
       <div className="rounded-xl bg-gray-50 p-4">
         <div className="sm:grid-cols-13 mt-0 grid h-[410px] grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4" >

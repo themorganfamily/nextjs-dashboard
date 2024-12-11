@@ -19,11 +19,11 @@ const links = [
   { name: 'Sandbox Tools', href: '/dashboard', icon: WrenchIcon },
   { name: 'Hosted Assets', href: '/assets', icon: CodeBracketIcon },
   {
-    name: 'Demo Payment Flows',
+    name: 'Payment Flows',
     href: '/dashboard/invoices/create',
     icon: MapIcon,
   },
-  { name: 'Demo Order Management', href: '/dashboard/invoices', icon: CurrencyDollarIcon },
+  { name: 'Order Management', href: '/dashboard/invoices', icon: CurrencyDollarIcon },
   { name: 'Test Customers', href: '/dashboard/customers', icon: UserGroupIcon },
 ];
 

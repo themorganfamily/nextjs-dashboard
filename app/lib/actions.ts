@@ -15,6 +15,8 @@ import { UUID } from 'crypto';
 
 // export const maxDuration = 60;
 
+const baseUrl = "https://kgn4k722.aue.devtunnels.ms:3001"
+
 export async function getServerSideProps(context:any) {
     console.log(context.req.headers.referer)
   }
@@ -151,7 +153,7 @@ export async function createZipUser(prevState: State, formData: FormData) {
         body: raw
     };
 
-    return fetch("https://hm3cvvxq.aue.devtunnels.ms:3001/createuser", requestOptions)
+    return fetch(baseUrl + "/createuser", requestOptions)
         .then((response) => response.json())
         .then((result) => { console.log(result); return result })
         .catch((error) => console.error(error));
@@ -199,8 +201,10 @@ export async function handleTopUp(prevState: State, formData: FormData) {
                 console.log("customer exists");
                 const balanceResult = await topUpBalance(customer.id, parseFloat(amount + ""));
 
+                const returnState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: 'Balance top up succesful!', modalMessage: 'Your new Zip account balance has been boosetd to allow for repeated testing!'  };
+                return returnState;
                 //revalidatePath('/dashboard/top-up');
-                redirect('/dashboard/top-up?result=success');
+               // redirect('/dashboard/top-up?result=success');
             }
             
         
@@ -209,7 +213,7 @@ export async function handleTopUp(prevState: State, formData: FormData) {
        
     }
 
-    const returnState: State = { message: "errorsssss", errors: {}, isLoading: false };
+    const returnState: State = { message: "errorsssss", errors: {}, isLoading: false, modalVisible: false };
     return returnState;
 }
 
@@ -253,7 +257,7 @@ export async function topUpBalance(id:string, amount?:number) {
         body: raw
     };
 
-    const topUpResponse = await fetch("https://hm3cvvxq.aue.devtunnels.ms:3001/topup/" + accountId, requestOptions)
+    const topUpResponse = await fetch(baseUrl + "/topup/" + accountId, requestOptions)
         .then((response) => response.json())
         .then((result) => { console.log(result); return result })
         .catch((error) => { console.error(error); return error });
@@ -274,7 +278,7 @@ export async function fetchCustomerInfo(id:number) {
       headers: myHeaders
     };
     
-    return fetch("https://hm3cvvxq.aue.devtunnels.ms:3001/customer/" + id, requestOptions)
+    return fetch(baseUrl + "/customer/" + id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);

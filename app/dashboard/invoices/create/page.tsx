@@ -120,7 +120,7 @@ export default async function Page(props: {
         breadcrumbs={[
           { label: 'Sandbox Tools', href: '/dashboard' },
           {
-            label: 'Create Order',
+            label: 'Payment Flows',
             href: '/dashboard/invoices/create',
             active: true,
           },

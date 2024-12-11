@@ -129,6 +129,7 @@ export function TopUp({ id }: { id: string}) {
         {/* <button className="rounded-md border p-2 hover:bg-gray-100 w-20 text-sm flex h-10 items-center"> */}
           <span className="sr-only">Top Up</span>
           {isLoading ? 
+          <div className='flex w-18'>
            <Oval
            visible={true}
            height="20"
@@ -140,10 +141,12 @@ export function TopUp({ id }: { id: string}) {
            wrapperClass=""
            strokeWidth="6"
        />
+       </div>
           :
-          <>
+          <div className='flex'>
           <BanknotesIcon className="w-5" /> 
-          </>
+          {/* <span className='text-sm pl-1'>Top up</span> */}
+          </div>
           
   }
         </button>
