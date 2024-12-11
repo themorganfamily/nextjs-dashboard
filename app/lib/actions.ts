@@ -217,6 +217,58 @@ export async function handleTopUp(prevState: State, formData: FormData) {
     return returnState;
 }
 
+export async function handleUnlock(prevState: State, formData: FormData) {
+
+    const email = formData.get("email");
+
+    if (email !== undefined  && email !== null && email !== "") {
+
+        console.log("email exists: " + email);
+
+        // if (amount !== undefined && amount !== null) {
+
+            // console.log("amount exists");
+            
+            const customer = await getCustomer(email+"");
+
+            if (customer != undefined && customer != null) {
+                console.log("customer exists");
+                const unlockResult = await unlockAccount(customer.account_id);
+
+                const returnState: State = { message: null, errors: {}, isLoading: false, modalVisible: false, title: 'Unlock succesful!', modalMessage: 'Your Zip account is now ready for testing!'  };
+                return returnState;
+                //revalidatePath('/dashboard/top-up');
+               // redirect('/dashboard/top-up?result=success');
+            }
+
+            const returnState: State = { message: "yea errors", errors: {}, isLoading: false, modalVisible: false, title: 'Unlock failed!', modalMessage: 'Your Zip account is NOT ready for testing!'  };
+                return returnState;
+            
+        
+        // }
+
+       
+    }
+
+    const returnState: State = { message: "errorsssss", errors: {}, isLoading: false, modalVisible: false };
+    return returnState;
+}
+
+export async function unlockAccount(id:string) {
+    const requestOptions = {
+        method: "PATCH",
+      };
+      
+      const unlockResponse =fetch(baseUrl + "/unlock/" + id, requestOptions)
+        .then((response) => response.json())
+        .then((result) => { console.log(result); return result })
+        .catch((error) => { console.error(error); return error });
+
+        const returnState: State = { message: null, errors: {}, isLoading: false, title: "Unlock succesful!" };
+        return returnState;
+}
+
+
 export async function topUpBalance(id:string, amount?:number) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");

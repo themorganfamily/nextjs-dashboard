@@ -165,7 +165,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                         </DialogTitle>
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">
-                            This can take a sec, but rest assured your new Zip account is on the way!
+                            This can take a moment, but rest assured your new Zip account is on the way!
                           </p>
 
                         </div>

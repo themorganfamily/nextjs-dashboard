@@ -28,17 +28,7 @@ export default async function RevenueChart() { // Make component async, remove t
         </h2>
       <div className="rounded-xl bg-gray-50 p-4">
         <div className=" mt-0 grid h-[410px]  items-end gap-2 rounded-md bg-white p-4 md:gap-4" >
-        <div 
-          id="zip-product-widget" 
-          data-zm-widget="popup" 
-          data-zm-region="au"
-          data-env="production"
-          data-zm-merchant="insert your AU merchant public key here or leave empty for other regions"      
-          data-zm-price="insert product price here" 
-          data-zm-asset="landingpage" 
-          data-zm-popup-asset="termsdialog" 
-          >
-      </div>
+
           </div>
         <div className="flex items-center pb-2 pt-6">
             <ArrowPathIcon className="h-5 w-5 text-gray-500" />

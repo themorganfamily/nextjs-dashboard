@@ -144,7 +144,7 @@ export default async function CardWrapper() {
       {/* <div className="flex items-center justify-center truncate rounded-xl bg-white h-80"> */}
         {/* <div className="pr-2 rounded-md bg-gray-100"> */}
         <Link
-          href="/dashboard/customers/create"
+          href="/dashboard/unlock"
           // className="rounded-xl shadow-sm flex items-center justify-center truncate rounded-xl bg-slate-100 hover:bg-slate-200 hover:shadow-black-100 hover:shadow-md h-40"
           className="rounded-xl  px-5 pt-1 truncate rounded-xl bg-gray-50 border border-0 border-gray-200 hover:shadow-black-100 hover:bg-gray-50 h-20"
 
@@ -153,7 +153,7 @@ export default async function CardWrapper() {
           <div className="flex items-center">
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold md:text-base">
-                Unlock customer
+                Unlock account
               </p>
               {/* <p className="hidden text-sm text-gray-500 sm:block"> */}
               {/* Generate a test account to test with
