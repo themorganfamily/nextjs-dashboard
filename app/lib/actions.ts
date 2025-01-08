@@ -15,7 +15,7 @@ import { UUID } from 'crypto';
 
 // export const maxDuration = 60;
 
-const baseUrl = "https://xgknfwcl.aue.devtunnels.ms:3001"
+const baseUrl = "https://wt3x47mq.aue.devtunnels.ms:3001"
 
 export async function getServerSideProps(context:any) {
     console.log(context.req.headers.referer)
